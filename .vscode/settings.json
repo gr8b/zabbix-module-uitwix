@@ -1,0 +1,9 @@
+{
+    "terminal.integrated.fontFamily": "fira-code-nerd",
+    "workbench.iconTheme": "fira-code-material-minimal",
+    "editor.fontFamily": "fira-code-nerd, FiraCode Nerd Font, Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "intelephense.environment.includePaths": [
+        "/var/www/html"
+    ]
+}

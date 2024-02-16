@@ -1,0 +1,37 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/php-mariadb
+{
+	"name": "PHP & MariaDB",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	// start the apache webserver
+	"postStartCommand": "apachectl start 2>/dev/null",
+
+	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
+	"forwardPorts": [8080, 3306],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "sudo chmod a+x \"$(pwd)\" && echo 'eval \"$(starship init bash)\"' >> ~/.bashrc && starship preset nerd-font-symbols -o ~/.config/starship.toml && .devcontainer/install.sh",
+
+	// Configure tool-specific properties. Temporary disabled: "DEVSENSE.phptools-vscode"
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"entuent.fira-code-nerd-font",
+				"bmewburn.vscode-intelephense-client",
+				"xdebug.php-debug",
+				"formulahendry.vscode-mysql",
+				"dbaeumer.vscode-eslint"
+			]
+		}
+	},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "vscode"
+}
