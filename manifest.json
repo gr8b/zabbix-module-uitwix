@@ -1,0 +1,16 @@
+{
+  "manifest_version": "2",
+  "type": "module",
+  "author": "gr8b",
+  "name": "UITwix",
+  "description": "UI tasty tweaks, crunchy as a Twix.",
+  "url": "https://zabbix.com",
+  "id": "uitwix",
+  "namespace": "UITwix",
+  "version": "1.0",
+  "assets": {
+    "css": ["twix-sticky.css"],
+    "js": ["twix-sticky.js"]
+  },
+  "actions": {}
+}

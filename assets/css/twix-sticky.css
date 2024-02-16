@@ -1,0 +1,29 @@
+[theme="blue-theme"] .uitwix-sticky {
+    --nav-background: rgba(235, 238, 240, 0.8);
+}
+[theme="hc-light"] .uitwix-sticky {
+    --nav-background: rgba(255, 255, 255, 0.7);
+}
+[theme="dark-theme"] .uitwix-sticky {
+    --nav-background: rgba(14, 16, 18, 0.7);
+}
+[theme="hc-dark"] .uitwix-sticky {
+    --nav-background: rgba(14, 16, 18, 0.7);
+}
+
+.uitwix-sticky {
+    position: sticky !important;
+    top: 0;
+    z-index: 100;
+    padding: 2px 0 !important;
+    background-color: var(--nav-background) !important;
+
+    .ui-tabs-nav,
+    nav > ul {
+        background-color: var(--nav-background);
+    }
+}
+
+.uitwix-sticky.header-navigation {
+    z-index: 101;
+}
