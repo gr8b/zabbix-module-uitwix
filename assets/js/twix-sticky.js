@@ -3,6 +3,8 @@
     [
         // Dashboard
         document.querySelector('.filter-space'), document.querySelector('.filter-space')?.previousElementSibling,
+        // Latest data
+        document.querySelector('#monitoring_latest_filter'),
         // Other pages
         [...document.querySelectorAll('.filter-container')].filter(
             el => el.matches('.filter-container') && el.closest('.filter-space') === null
