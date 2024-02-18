@@ -21,21 +21,18 @@ echo new CTemplateTag('uitwix-tmpl', [
 ($ => {
     const tmpl = document.querySelector('#uitwix-tmpl');
     const $nav = $('#tabs');
-    let preferences = (`; ${document.cookie}`).split('; uitwix=').pop().split(';')[0].split('-');
 
     $nav.find('.ui-tabs-nav').append(tmpl.content.querySelector('#tab_uitwix'));
     $nav.find('[role="tabpanel"]:last').after(tmpl.content.querySelector('#uitwix'));
     $nav.tabs('refresh');
 
-    $nav.on('click', '[name^="uitwix["]', e => {
-        const name = e.target.getAttribute('name').match(/.+\[(.+)\]/)[1];
-        const value = e.target.checked ? 1 : 0;
+    $nav.closest('form').on('submit', e => {
+        let preferences = [];
 
-        if (value && preferences.indexOf(name) === -1) {
+        for (const checkbox of [...document.querySelectorAll('[name^="uitwix["]:checked')]) {
+            const name = checkbox.getAttribute('name').match(/.+\[(.+)\]/)[1];
+
             preferences.push(name);
-        }
-        else if (!value && preferences.indexOf(name)) {
-            preferences.splice(preferences.indexOf(name), 1);
         }
 
         document.cookie = `uitwix=${preferences.join('-')}`;
