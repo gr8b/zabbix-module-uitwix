@@ -11,7 +11,7 @@ echo new CTemplateTag('uitwix-tmpl', [
     (new CDiv((new CFormGrid([
         new CLabel(_('Enable sticky filters'), 'uitwix_sticky'),
         new CFormField((new CCheckBox('uitwix[sticky]', 1))->setChecked((int) $data['sticky'])),
-        new CLabel(_('Enable modal windows drag'), 'uitwix_windrag'),
+        new CLabel(_('Enable dragging of modal windows'), 'uitwix_windrag'),
         new CFormField((new CCheckBox('uitwix[windrag]', 1))->setChecked((int) $data['windrag'])),
     ]))))
         ->setId('uitwix')
