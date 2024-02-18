@@ -10,7 +10,7 @@
   "version": "1.0",
   "assets": {
     "css": ["twix-sticky.css"],
-    "js": ["twix-sticky.js"]
+    "js": ["twix-sticky.js", "twix-dragm.js"]
   },
   "actions": {}
 }

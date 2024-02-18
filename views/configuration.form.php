@@ -12,7 +12,7 @@ echo new CTemplateTag('uitwix-tmpl', [
         new CLabel(_('Enable sticky filters'), 'uitwix_sticky'),
         new CFormField((new CCheckBox('uitwix[sticky]', 1))->setChecked((int) $data['sticky'])),
         new CLabel(_('Enable modal windows drag'), 'uitwix_windrag'),
-        new CFormField((new CCheckBox('uitwix[windrag]', 1))->setChecked((int) 0)->setEnabled(false)),
+        new CFormField((new CCheckBox('uitwix[windrag]', 1))->setChecked((int) $data['windrag'])),
     ]))))
         ->setId('uitwix')
         ->setAttribute('role', 'tabpanel')
