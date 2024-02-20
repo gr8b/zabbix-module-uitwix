@@ -19,13 +19,21 @@ class Module extends CModule {
      * @var array $preferences
      */
     protected $preferences = [
-        'sticky' => 0,
-        'windrag' => 0
+        'state' => [
+            'sticky' => 0,
+            'windrag' => 0,
+            'bodybg' => 0,
+            'asidebg' => 0
+        ],
+        'color' => [
+            'bodybg' => '#000000',
+            'asidebg' => '#403030'
+        ]
     ];
 
     public function init(): void
     {
-        $this->preferences = array_merge($this->preferences, $this->getUserPreferences());
+        $this->preferences['state'] = array_merge($this->preferences['state'], $this->getUserPreferences());
     }
 
     public function onBeforeAction(Action $action): void
@@ -56,7 +64,7 @@ class Module extends CModule {
         }
 
         if ($cookie === null) {
-            setcookie('uitwix', $profile);
+            setcookie('uitwix', $profile, 0, '/');
         }
 
         return array_fill_keys(explode('-', $cookie?:$profile), 1);

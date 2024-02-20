@@ -1,0 +1,34 @@
+[uitwix-coloring] {
+    body { background-color: var(--uitwix-body-bgcolor); }
+    .sidebar { background-color: var(--uitwix-sidebar-bgcolor); }
+    .menu-main .submenu { background-color: var(--uitwix-sidebar-bgcolor); }
+    .menu-user .submenu { background-color: var(--uitwix-sidebar-bgcolor); }
+    .menu-main .submenu .submenu li a { background-color: var(--uitwix-sidebar-bgcolor); }
+
+    .menu-main > li.is-expanded > a,
+    .menu-main > li.is-expanded > a:focus,
+    .menu-main > li > a:hover,
+    .menu-main > li > a:focus,
+    .menu-main > li.is-selected > a,
+    .menu-main .submenu > li.is-selected > a,
+    .menu-main .submenu a:hover,
+    .menu-main .submenu a:focus { background-color: rgba(0, 0, 0, 0.2) }
+    .menu-main .submenu a { background-color: rgba(0, 0, 0, 0.1) }
+    .menu-main .submenu > li:not(:last-child) { border-bottom: 1px solid rgba(0, 0, 0, 0.4) }
+
+    .menu-main .submenu .submenu li a:hover,
+    .menu-main .submenu .submenu li a:focus { background-color: rgba(0, 0, 0, 0.2) }
+
+    .menu-user > li.is-expanded > a,
+    .menu-user > li.is-expanded > a:focus,
+    .menu-user > li > a:hover,
+    .menu-user > li > a:focus,
+    .menu-user > li.is-selected > a,
+    .menu-user .submenu > li.is-selected > a,
+    .menu-user .submenu a:hover,
+    .menu-user .submenu a:focus { background-color: rgba(0, 0, 0, 0.2) }
+    .menu-user .submenu a { background-color: rgba(0, 0, 0, 0.1) }
+    .menu-user .submenu > li:not(:last-child) { border-bottom: 1px solid rgba(0, 0, 0, 0.4) }
+
+    .form-search .search { background-color: rgba(0, 0, 0, 0.2); border-color: rgba(0, 0, 0, 0.1) }
+}
