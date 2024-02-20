@@ -60,9 +60,14 @@ new CScriptTag(<<<'JAVASCRIPT'
 
     $nav.on('click', '[name="uitwix[bodybg]"],[name="uitwix[asidebg]"]', e => {
         const input = e.target.parentNode.querySelector('input[type="color"]');
+        const input_bodyattr = {
+            'uitwix[bodybg]': 'uitwix-coloring-body',
+            'uitwix[asidebg]': 'uitwix-coloring-sidebar'
+        }
 
         input.toggleAttribute('disabled', !e.target.checked);
         input.closest('label').classList.toggle('disabled', !e.target.checked);
+        document.documentElement.toggleAttribute(input_bodyattr[e.target.getAttribute('name')], e.target.checked);
     });
     $nav.on('input', '[name="uitwix[color][bodybg]"],[name="uitwix[color][asidebg]"]', e => {
         const input_cssvar = {

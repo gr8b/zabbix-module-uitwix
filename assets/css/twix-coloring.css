@@ -1,5 +1,6 @@
-[uitwix-coloring] {
-    body { background-color: var(--uitwix-body-bgcolor); }
+[uitwix-coloring-body] body { background-color: var(--uitwix-body-bgcolor); }
+
+[uitwix-coloring-sidebar] {
     .sidebar { background-color: var(--uitwix-sidebar-bgcolor); }
     .menu-main .submenu { background-color: var(--uitwix-sidebar-bgcolor); }
     .menu-user .submenu { background-color: var(--uitwix-sidebar-bgcolor); }
