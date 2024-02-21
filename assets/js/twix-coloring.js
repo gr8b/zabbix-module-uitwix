@@ -6,8 +6,6 @@
     const colors = Object.fromEntries(
         (`; ${document.cookie}`).split(`; uitwix-coloring=`).pop().split(';')[0].split('-').map(v => v.split(':'))
     );
-    // const body_bgcolor = 'black'; // use from user defined settings
-    // const sidebar_bgcolor = '#403030'; // use from user defined settings
     const style = document.createElement('style');
     style.textContent = `:root {
     --uitwix-body-bgcolor: ${colors.bodybg??'transparent'};

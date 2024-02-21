@@ -1,3 +1,7 @@
+#uitwix label {
+    pointer-events: initial;
+}
+
 [uitwix-coloring-body] body { background-color: var(--uitwix-body-bgcolor); }
 
 [uitwix-coloring-sidebar] {
