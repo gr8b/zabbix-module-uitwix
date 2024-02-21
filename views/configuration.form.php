@@ -79,15 +79,25 @@ new CScriptTag(<<<'JAVASCRIPT'
     })
 
     $nav.closest('form').on('submit', e => {
-        let preferences = [];
+        let checkboxes = [];
+        let colors = [];
 
         for (const checkbox of [...document.querySelectorAll('[name^="uitwix["]:checked')]) {
             const name = checkbox.getAttribute('name').match(/.+\[(.+)\]/)[1];
 
-            preferences.push(name);
+            checkboxes.push(name);
         }
 
-        document.cookie = `uitwix=${preferences.join('-')}`;
+        for (const color of [...document.querySelectorAll('input[name^="uitwix[color]"]')]) {
+            const name = color.getAttribute('name').match(/.+\[(.+)\]\[(.+)\]/)[2];
+
+            colors.push(`${name}:${color.value}`);
+        }
+
+        console.log({colors});
+
+        document.cookie = `uitwix=${checkboxes.join('-')}`;
+        document.cookie = `uitwix-coloring=${colors.join('-')}`;
     })
 })(jQuery)
 JAVASCRIPT);

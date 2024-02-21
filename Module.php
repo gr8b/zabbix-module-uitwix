@@ -33,7 +33,7 @@ class Module extends CModule {
 
     public function init(): void
     {
-        $this->preferences['state'] = array_merge($this->preferences['state'], $this->getUserPreferences());
+        $this->preferences = $this->getUserPreferences($this->preferences);
     }
 
     public function onBeforeAction(Action $action): void
@@ -54,9 +54,9 @@ class Module extends CModule {
      * Get user preferences.
      * Updates user profile 'uitwix' when cookie 'uitwix' value differs from profile value.
      */
-    protected function getUserPreferences(): array
+    protected function getUserPreferences(array $preferences): array
     {
-        $profile = CProfile::get('uitwix');
+        $profile = CProfile::get('uitwix', '');
         $cookie = CCookieHelper::get('uitwix');
 
         if ($cookie !== null && $cookie !== $profile) {
@@ -67,6 +67,28 @@ class Module extends CModule {
             setcookie('uitwix', $profile, 0, '/');
         }
 
-        return array_fill_keys(explode('-', $cookie?:$profile), 1);
+        $preferences['state'] = array_merge($preferences['state'], array_fill_keys(explode('-', $cookie?:$profile), 1));
+
+        $profile = CProfile::get('uitwix-coloring', '');
+        $cookie = CCookieHelper::get('uitwix-coloring');
+
+        if ($cookie !== null && $cookie !== $profile) {
+            CProfile::update('uitwix-coloring', $cookie, PROFILE_TYPE_STR);
+        }
+
+        if ($cookie === null) {
+            setcookie('uitwix-coloring', $profile, 0, '/');
+        }
+
+        $colors = [];
+
+        foreach (explode('-', $cookie?:$profile) as $color) {
+            [$key, $value] = explode(':', $color) + ['', ''];
+            $colors[$key] = $value;
+        }
+
+        $preferences['color'] = array_merge($preferences['color'], $colors);
+
+        return $preferences;
     }
 }
