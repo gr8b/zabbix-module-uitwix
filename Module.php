@@ -31,6 +31,18 @@ class Module extends CModule {
         ]
     ];
 
+    public function getAssets(): array
+    {
+        $assets = parent::getAssets();
+
+        if (($_GET['action']??'') === 'userprofile.edit') {
+            $assets['js'][] = 'twix-userform.js';
+            $assets['css'][] = 'twix-userform.css';
+        }
+
+        return $assets;
+    }
+
     public function init(): void
     {
         $this->preferences = $this->getUserPreferences($this->preferences);
