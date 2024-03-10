@@ -37,7 +37,6 @@ class Module extends CModule {
 
         if (($_GET['action']??'') === 'userprofile.edit') {
             $assets['js'][] = 'twix-userform.js';
-            $assets['css'][] = 'twix-userform.css';
         }
 
         return $assets;
@@ -70,13 +69,15 @@ class Module extends CModule {
     {
         $profile = CProfile::get('uitwix', '');
         $cookie = CCookieHelper::get('uitwix');
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = rtrim(substr($path, 0, strrpos($path, '/')), '/');
 
         if ($cookie !== null && $cookie !== $profile) {
             CProfile::update('uitwix', $cookie, PROFILE_TYPE_STR);
         }
 
         if ($cookie === null) {
-            setcookie('uitwix', $profile, 0, '/');
+            setcookie('uitwix', $profile, 0, $path);
         }
 
         $preferences['state'] = array_merge($preferences['state'], array_fill_keys(explode('-', $cookie?:$profile), 1));
@@ -89,7 +90,7 @@ class Module extends CModule {
         }
 
         if ($cookie === null) {
-            setcookie('uitwix-coloring', $profile, 0, '/');
+            setcookie('uitwix-coloring', $profile, 0, $path);
         }
 
         $colors = [];
