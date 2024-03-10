@@ -9,7 +9,7 @@
   "namespace": "UITwix",
   "version": "1.0",
   "assets": {
-    "css": ["twix-sticky.css", "twix-coloring.css"],
+    "css": ["uitwix.css"],
     "js": ["twix-sticky.js", "twix-dragm.js", "twix-coloring.js"]
   },
   "actions": {}

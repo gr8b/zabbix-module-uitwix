@@ -4,8 +4,9 @@
     && document.documentElement.setAttribute('uitwix-coloring-sidebar', 'on');
 (() => {
     const colors = Object.fromEntries(
-        (`; ${document.cookie}`).split(`; uitwix-coloring=`).pop().split(';')[0].split('-').map(v => v.split(':'))
+        decodeURIComponent((`; ${document.cookie}`).split(`; uitwix-coloring=`).pop().split(';')[0]).split('-').map(v => v.split(':'))
     );
+
     const style = document.createElement('style');
     style.textContent = `:root {
     --uitwix-body-bgcolor: ${colors.bodybg??'transparent'};

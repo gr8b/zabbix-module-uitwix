@@ -10,4 +10,7 @@
             el => el.matches('.filter-container') && el.closest('.filter-space') === null
         )
     ].map(el => el instanceof HTMLElement && el.classList.add('uitwix-sticky'))
+    && document.addEventListener('click',
+        e => e.target.closest('.tabfilter-subfilter')?.classList.toggle('uitwix-subfilter-collapsed')
+    )
 );

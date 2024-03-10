@@ -42,9 +42,7 @@ $(() => {
             colors.push(`${name}:${color.value}`);
         }
 
-        console.log({colors});
-
-        document.cookie = `uitwix=${checkboxes.join('-')}`;
-        document.cookie = `uitwix-coloring=${colors.join('-')}`;
+        document.cookie = `uitwix=${encodeURIComponent(checkboxes.join('-'))}`;
+        document.cookie = `uitwix-coloring=${encodeURIComponent(colors.join('-'))}`;
     })
 });
