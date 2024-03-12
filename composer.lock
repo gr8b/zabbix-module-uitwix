@@ -4,8 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5efe5a6ec1d9d8354202d166de6ea690",
-    "packages": [
+    "content-hash": "99ca51a124c9751b14ac64819a69a1d6",
+    "packages": [],
+    "packages-dev": [
         {
             "name": "wikimedia/less.php",
             "version": "v4.2.1",
@@ -82,7 +83,6 @@
             "time": "2024-02-25T01:55:00+00:00"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

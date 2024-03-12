@@ -1,0 +1,7 @@
+{
+    "manifest_version": 2,
+    "assets": {
+      "css": ["uitwix.css"],
+      "js": ["twix-sticky.js", "twix-dragm.js", "twix-coloring.js"]
+    }
+}

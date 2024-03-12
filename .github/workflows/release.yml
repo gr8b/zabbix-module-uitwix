@@ -24,6 +24,10 @@ jobs:
           echo "MODULE_VERSION=${MODULE_VERSION}" >> $GITHUB_ENV
           rm -rf *-zabbix-6.4-7.0.zip *-zabbix-5.0-6.2.zip
 
+          # install composer dependencies and run build script
+          [ -f "composer.json" ] && composer install || echo "composer.json not found. Skipping composer install."
+          [ -f "composer.json" ] && [ "$(jq -r '.scripts.build' composer.json 2>/dev/null)" != "null" ] && composer run build
+
       - name: Build release for Zabbix 5.0 and newer, up to Zabbix 6.2
         if: ${{ hashFiles('manifest.5.0.json') != '' }}
         run: |
@@ -36,7 +40,7 @@ jobs:
         run: |
           jq -s '.[0] * .[1]' manifest.json manifest.6.4.json > tmp.json && mv tmp.json manifest.json
           jq ".version = \"${MODULE_VERSION}\"" manifest.json > tmp.json && mv tmp.json manifest.json
-          zip -r "v${MODULE_VERSION}-zabbix-6.4-7.0.zip" manifest.json Module.php assets helpers actions views
+          zip -r "v${MODULE_VERSION}-zabbix-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views
 
       - name: Generate release notes
         if: ${{ hashFiles('RELEASE_NOTES.md') != '' && hashFiles('*-zabbix-6.4-7.0.zip', '*-zabbix-5.0-6.2.zip') != '' }}

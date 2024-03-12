@@ -1,9 +1,12 @@
 {
-    "require": {
+    "require-dev": {
         "wikimedia/less.php": "^4.2"
     },
     "scripts": {
+        "build": [
+            "@build-css"
+        ],
         "dev-watch": "./vendor/bin/lessc -w assets/less/uitwix.less assets/css/uitwix.css",
-        "publish": "./vendor/bin/lessc -x assets/less/uitwix.less > assets/css/uitwix.css"
+        "build-css": "./vendor/bin/lessc -x assets/less/uitwix.less > assets/css/uitwix.css"
     }
 }
