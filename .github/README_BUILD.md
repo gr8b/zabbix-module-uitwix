@@ -21,6 +21,16 @@ An automatic build will be triggered upon the push of a tag.
 A module `.zip` file for Zabbix 6.2 and older will be generated when the `manifest.5.0.json` file is present in the root of the repository.
 A module `.zip` file for Zabbix 6.4 and newer will be generated when the `manifest.6.4.json` file is present in the root of the repository.
 
+To invoke a module-specific build step, a `composer.json` script named '**build**' should be defined. Script is called for each release version build.
+```json
+  "scripts": {
+    "build": [
+      "echo 'hello from build task'",
+      "composer --dump-autoload"
+    ]
+  }
+```
+
 ## Versioning
 
 The module version uses only the MINOR and PATCH parts of semantic versioning.

@@ -25,11 +25,10 @@ jobs:
           # remove prefix v when it is set
           MODULE_VERSION=${MODULE_VERSION#v}
           echo "MODULE_VERSION=${MODULE_VERSION}" >> $GITHUB_ENV
-          rm -rf *-zabbix-6.4-7.0.zip *-zabbix-5.0-6.2.zip
+          echo "MODULE_NAME=$(jq -r '.id' manifest.json)" >> $GITHUB_ENV
 
-          # install composer dependencies and run build script
+          # install composer dependencies
           [ -f "composer.json" ] && composer install || echo "composer.json not found. Skipping composer install."
-          [ -f "composer.json" ] && [ "$(jq -r '.scripts.build' composer.json 2>/dev/null)" != "null" ] && composer run build
 
           # create release files directory
           mkdir bin
@@ -39,14 +38,22 @@ jobs:
         run: |
           jq -s '.[0] * .[1]' manifest.json manifest.5.0.json > tmp.json && mv tmp.json manifest.json
           jq ".version = \"${MODULE_VERSION}\"" manifest.json > tmp.json && mv tmp.json manifest.json
-          zip -r "bin/v${MODULE_VERSION}-zabbix-5.0-6.2.zip" manifest.json Module.php public helpers actions views
+
+          # run composer build script if it is defined in composer.json exists
+          [ -f "composer.json" ] && [ "$(jq -r '.scripts.build' composer.json 2>/dev/null)" != "null" ] && composer run build
+
+          zip -r "bin/zabbix-module-${MODULE_NAME}-5.0-6.2.zip" manifest.json Module.php public helpers actions views
 
       - name: Build release for Zabbix 6.4 and newer
         if: ${{ hashFiles('manifest.6.4.json') != '' }}
         run: |
           jq -s '.[0] * .[1]' manifest.json manifest.6.4.json > tmp.json && mv tmp.json manifest.json
           jq ".version = \"${MODULE_VERSION}\"" manifest.json > tmp.json && mv tmp.json manifest.json
-          zip -r "bin/v${MODULE_VERSION}-zabbix-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views
+
+          # run composer build script if it is defined in composer.json exists
+          [ -f "composer.json" ] && [ "$(jq -r '.scripts.build' composer.json 2>/dev/null)" != "null" ] && composer run build
+
+          zip -r "bin/zabbix-module-${MODULE_NAME}-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views
 
       - name: Generate release notes
         if: ${{ hashFiles('RELEASE_NOTES.md') != '' && hashFiles('bin/*.zip') != '' }}
