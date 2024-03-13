@@ -8,10 +8,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      repository-projects: write
 
     steps:
       - name: Checkout code
@@ -32,22 +28,25 @@ jobs:
           [ -f "composer.json" ] && composer install || echo "composer.json not found. Skipping composer install."
           [ -f "composer.json" ] && [ "$(jq -r '.scripts.build' composer.json 2>/dev/null)" != "null" ] && composer run build
 
+          # create release files directory
+          mkdir bin
+
       - name: Build release for Zabbix 5.0 and newer, up to Zabbix 6.2
         if: ${{ hashFiles('manifest.5.0.json') != '' }}
         run: |
           jq -s '.[0] * .[1]' manifest.json manifest.5.0.json > tmp.json && mv tmp.json manifest.json
           jq ".version = \"${MODULE_VERSION}\"" manifest.json > tmp.json && mv tmp.json manifest.json
-          zip -r "v${MODULE_VERSION}-zabbix-5.0-6.2.zip" manifest.json Module.php public helpers actions views
+          zip -r "bin/v${MODULE_VERSION}-zabbix-5.0-6.2.zip" manifest.json Module.php public helpers actions views
 
       - name: Build release for Zabbix 6.4 and newer
         if: ${{ hashFiles('manifest.6.4.json') != '' }}
         run: |
           jq -s '.[0] * .[1]' manifest.json manifest.6.4.json > tmp.json && mv tmp.json manifest.json
           jq ".version = \"${MODULE_VERSION}\"" manifest.json > tmp.json && mv tmp.json manifest.json
-          zip -r "v${MODULE_VERSION}-zabbix-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views
+          zip -r "bin/v${MODULE_VERSION}-zabbix-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views
 
       - name: Generate release notes
-        if: ${{ hashFiles('RELEASE_NOTES.md') != '' && hashFiles('*-zabbix-6.4-7.0.zip', '*-zabbix-5.0-6.2.zip') != '' }}
+        if: ${{ hashFiles('RELEASE_NOTES.md') != '' && hashFiles('bin/*.zip') != '' }}
         run: |
           chmod +x .github/release-notes.sh
           .github/release-notes.sh > RELEASE.md
@@ -55,7 +54,7 @@ jobs:
 
       - name: Upload release artifacts
         uses: ncipollo/release-action@v1
-        if: ${{ hashFiles('*-zabbix-6.4-7.0.zip', '*-zabbix-5.0-6.2.zip') != '' }}
+        if: ${{ hashFiles('bin/*.zip') != '' }}
         with:
           bodyFile: RELEASE.md
-          artifacts: "*-zabbix-6.4-7.0.zip,*-zabbix-5.0-6.2.zip"
+          artifacts: "bin/*.zip"
