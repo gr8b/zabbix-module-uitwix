@@ -5,9 +5,9 @@
             for (const mutation of [...mutations]) {
                 for (const elm of [...mutation.addedNodes]) {
                     if (elm.getAttribute && elm.getAttribute('role') === 'dialog') {
-                        $('.overlay-dialogue.modal.modal-popup').draggable({
+                        $(elm).draggable({
                             containment: 'window',
-                            handle: '>.dashboard-widget-head',
+                            handle: '>.dashboard-widget-head, >.overlay-dialogue-header',
                             start: (e, ui) => ui.helper.addClass('uitwix-moved')
                         });
                     }
