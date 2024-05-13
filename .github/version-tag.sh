@@ -1,12 +1,13 @@
 #!/bin/bash
 
 script_dir=$(dirname "$(realpath "$0")")
-prev_tag=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1  --max-count=1`)
+prev_tag=$(git describe --abbrev=0 --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "")
 minor=0
 patch=0
 
-if [ "$prev_tag" != "none" ]; then
-    commits=$(git log --oneline "$prev_tag"..)
+
+if [ "$prev_tag" != "" ]; then
+    commits=$(git log --oneline "$prev_tag"..HEAD)
 else
     commits=$(git log --oneline)
 fi
@@ -23,7 +24,7 @@ while IFS= read -r commit; do
     fi
 
     if [[ "$commit_type" == "fix:" ]]; then
-        ((patch++))
+        patch=1
     fi
 done <<< "$commits"
 
