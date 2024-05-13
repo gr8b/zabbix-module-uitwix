@@ -2,6 +2,8 @@
 
 ![](doc/user-profile.png)
 
+[![Latest Release](https://img.shields.io/github/v/release/gr8b/zabbix-module-uitwix)](https://github.com/gr8b/zabbix-module-uitwix/releases)
+
 ### Tweaks
 
 - Enable filters to remain visible within the viewing area when scrolling through tables with extensive data.
