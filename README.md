@@ -10,6 +10,7 @@
 - Allow users to manually reposition modal windows within the body area.\
   _Please note that manually changing the position of the modal window is not saved._
 - Modify main navigation color scheme and background color.
+- Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
 
 ### Development
 
@@ -31,4 +32,4 @@ Clone repository, run `composer install` to initialize composer packages, then c
   - Press ```Scan directory``` in the upper right corner of the screen
   - There should now be a new module with the name UITwix press enable so the module becomes active
 - Go to User settings - Profile
-  - There is now an extra tab UI Twix where you can change the settings you like 
+  - There is now an extra tab UI Twix where you can change the settings you like

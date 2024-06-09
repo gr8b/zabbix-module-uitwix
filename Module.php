@@ -28,6 +28,9 @@ class Module extends CModule {
         'color' => [
             'bodybg' => '#000000',
             'asidebg' => '#403030'
+        ],
+        'colortags' => [
+            "class\n1\n#ff0000"
         ]
     ];
 
@@ -101,6 +104,33 @@ class Module extends CModule {
         }
 
         $preferences['color'] = array_merge($preferences['color'], $colors);
+
+        // Color tags.
+        $profile = CProfile::get('uitwix-colortags', '');
+        $cookie = CCookieHelper::get('uitwix-colortags');
+
+        if ($cookie !== null && $cookie !== $profile) {
+            CProfile::update('uitwix-colortags', $cookie, PROFILE_TYPE_STR);
+        }
+
+        if ($cookie === null) {
+            setcookie('uitwix-colortags', $profile, 0, $path);
+        }
+
+        $preferences['colortags'] = [];
+        $colortags = explode("\n", $cookie?:$profile);
+
+        foreach (array_chunk($colortags, 3) as $colortag) {
+            [$string, $match, $color] = $colortag + ['', '', ''];
+
+            if ($string !== '' && $match && $color !== '') {
+                $preferences['colortags'][] = compact('string', 'match', 'color');
+            }
+        }
+
+        if (!$preferences['colortags']) {
+            $preferences['colortags'][] = ['string' => '', 'match' => 1, 'color' => '#ff0000'];
+        }
 
         return $preferences;
     }

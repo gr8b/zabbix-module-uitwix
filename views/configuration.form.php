@@ -4,6 +4,7 @@
  * @param $this CView
  */
 
+
 echo new CTemplateTag('uitwix-tmpl', [
     (new CListItem((new CLink(_('UI Twix'), '#uitwix'))))
         ->setId('tab_uitwix')
@@ -33,7 +34,44 @@ echo new CTemplateTag('uitwix-tmpl', [
                     _('Navigation background color')
                 ]))->addClass(!!$data['state']['asidebg'] ? null : ZBX_STYLE_DISABLED)
             ])
-        ])
+        ]),
+
+        new CLabel(_('Color tags')),
+        (new CFormField(
+            (new CDiv([
+                (new CTable())
+                    ->setHeader([
+                        (new CCol(_('String')))->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        new CCol(_('Match')),
+                        '',
+                        ''
+                    ])
+                    ->setFooter(
+                        (new CCol(
+                            (new CButtonLink(_('Add')))->addClass('element-table-add')
+                        ))->setColSpan(4)
+                    ),
+                new CTemplateTag('colortag-row-tmpl', (new CRow([
+                        (new CTextBox('uitwix-colortag[#{rowNum}][string]', '#{string}'))
+                            ->removeId()
+                            ->setAttribute('placeholder', _('value'))
+                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        (new CSelect('uitwix-colortag[#{rowNum}][match]'))->addOptions(CSelect::createOptionsFromArray([
+                            1 => _('Starts with'),
+                            2 => _('Contains'),
+                            3 => _('Ends with')
+                        ]))->removeId(),
+                        (new CLabel([
+                            (new CInput('color', 'uitwix-colortag[#{rowNum}][color]', '#{color}'))->removeId()
+                        ])),
+                        (new CButtonLink(_('Remove')))->addClass('element-table-remove')
+                    ]))->addClass('form_row')
+                ),
+                new CTemplateTag('colortag-data', json_encode($data['colortags']))
+            ]))
+                ->setId('uitwix-colortag-table')
+                ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
+        ))
     ]))))
         ->setId('uitwix')
         ->setAttribute('role', 'tabpanel')
