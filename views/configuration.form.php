@@ -36,8 +36,17 @@ echo new CTemplateTag('uitwix-tmpl', [
             ])
         ]),
 
+        new CLabel(_('Custom styles')),
+        new CFormField([
+            new CLabel([
+                (new CCheckBox('uitwix[state][csseditor]', 1))->setChecked((int) $data['state']['csseditor']),
+                new CSpan(_('Enable editor for all pages'))
+            ]),
+            new CDiv((new CButtonLink(_('Open editor')))->setId('uitwix-csseditor'))
+        ]),
+
         new CLabel(_('Color tags')),
-        (new CFormField(
+        new CFormField(
             (new CDiv([
                 (new CTable())
                     ->setHeader([
@@ -71,7 +80,7 @@ echo new CTemplateTag('uitwix-tmpl', [
             ]))
                 ->setId('uitwix-colortag-table')
                 ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
-        ))
+        )
     ]))))
         ->setId('uitwix')
         ->setAttribute('role', 'tabpanel')

@@ -23,7 +23,8 @@ class Module extends CModule {
             'sticky' => 0,
             'windrag' => 0,
             'bodybg' => 0,
-            'asidebg' => 0
+            'asidebg' => 0,
+            'csseditor' => 0
         ],
         'color' => [
             'bodybg' => '#000000',

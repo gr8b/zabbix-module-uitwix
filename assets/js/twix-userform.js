@@ -26,6 +26,10 @@ $(() => {
         document.body.style.setProperty(input_cssvar[e.target.getAttribute('name')], e.target.value);
     });
 
+    $nav.on('click', '#uitwix-csseditor', e => {
+
+    });
+
     $nav.find('#uitwix-colortag-table table').dynamicRows({
         template: '#colortag-row-tmpl',
         rows: JSON.parse($nav.find('#colortag-data').html()),
