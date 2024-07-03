@@ -32,6 +32,9 @@ class Module extends CModule {
         ],
         'colortags' => [
             "class\n1\n#ff0000"
+        ],
+        'custom-css' => [
+            'value' => '/* Define your custom css rules */'
         ]
     ];
 

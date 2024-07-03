@@ -26,9 +26,12 @@ $(() => {
         document.body.style.setProperty(input_cssvar[e.target.getAttribute('name')], e.target.value);
     });
 
-    $nav.on('click', '#uitwix-csseditor', e => {
+    const $cssinput = $nav.find('[data-name="uitwix[custom-css][value]"]');
 
-    });
+    $cssinput.multilineInput($cssinput.data('options'));
+    $nav.on('change', '[name="uitwix[state][csseditor]"]', e => $cssinput.multilineInput(
+        e.target.checked ? 'unsetReadOnly' : 'setReadOnly'
+    ));
 
     $nav.find('#uitwix-colortag-table table').dynamicRows({
         template: '#colortag-row-tmpl',

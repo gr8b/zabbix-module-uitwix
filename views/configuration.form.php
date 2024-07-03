@@ -5,7 +5,9 @@
  */
 
 
-echo new CTemplateTag('uitwix-tmpl', [
+echo
+    (new CTag('script', true))->setAttribute('src', 'jsLoader.php?files[]=multilineinput.js'),
+    new CTemplateTag('uitwix-tmpl', [
     (new CListItem((new CLink(_('UI Twix'), '#uitwix'))))
         ->setId('tab_uitwix')
         ->setAttribute('role', 'tab'),
@@ -37,13 +39,21 @@ echo new CTemplateTag('uitwix-tmpl', [
         ]),
 
         new CLabel(_('Custom styles')),
-        new CFormField([
-            new CLabel([
-                (new CCheckBox('uitwix[state][csseditor]', 1))->setChecked((int) $data['state']['csseditor']),
-                new CSpan(_('Enable editor for all pages'))
-            ]),
-            new CDiv((new CButtonLink(_('Open editor')))->setId('uitwix-csseditor'))
-        ]),
+        (new CFormField([
+            (new CCheckBox('uitwix[state][csseditor]', 1))->setChecked((int) $data['state']['csseditor']),
+            (new CMultilineInput('uitwix[custom-css][value]', '', ['add_post_js' => false]))
+                ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
+                ->setAttribute('data-options', json_encode([
+                    'title' => _('CSS'),
+                    'placeholder' => '',
+                    'placeholder_textarea' => '',
+                    'grow' => 'auto',
+                    'rows' => 0,
+                    'value' => $data['custom-css']['value'],
+                    'maxlength' => DB::getFieldLength('profiles', 'value_str'),
+                    'readonly' => !$data['state']['csseditor']
+                ]))
+        ]))->addStyle('display: flex'),
 
         new CLabel(_('Color tags')),
         new CFormField(
