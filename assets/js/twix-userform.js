@@ -26,12 +26,14 @@ $(() => {
         document.body.style.setProperty(input_cssvar[e.target.getAttribute('name')], e.target.value);
     });
 
-    const $cssinput = $nav.find('[data-name="uitwix[custom-css][value]"]');
+    $nav.find('#uitwix-css-table table').dynamicRows({
+        template: '#uitwix-css-table [data-template]',
+        dataCallback: (row) => ({action: '', css: '', ...row})
+    }).on('tableupdate.dynamicRows', e => {
+        const $cssinput = $(e.target).find('.form_row:last .multilineinput-control');
 
-    $cssinput.multilineInput($cssinput.data('options'));
-    $nav.on('change', '[name="uitwix[state][csseditor]"]', e => $cssinput.multilineInput(
-        e.target.checked ? 'unsetReadOnly' : 'setReadOnly'
-    ));
+        $cssinput.multilineInput($cssinput.data('options'));
+    }).data('dynamicRows').addRows(JSON.parse($nav.find('#uitwix-css-table [data-rows]').html()));
 
     $nav.find('#uitwix-colortag-table table').dynamicRows({
         template: '#colortag-row-tmpl',

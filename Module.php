@@ -2,11 +2,15 @@
 
 namespace Modules\UITwix;
 
+use APP;
 use CView;
 use CController as Action;
 use CCookieHelper;
 use CProfile;
+use CCsrfTokenHelper;
 use Zabbix\Core\CModule;
+
+use CTag;
 
 class Module extends CModule {
 
@@ -14,6 +18,7 @@ class Module extends CModule {
      * @var CView $tmpl
      */
     protected $tmpl;
+    protected $css = '';
 
     /**
      * @var array $preferences
@@ -24,7 +29,7 @@ class Module extends CModule {
             'windrag' => 0,
             'bodybg' => 0,
             'asidebg' => 0,
-            'csseditor' => 0
+            'css' => 0
         ],
         'color' => [
             'bodybg' => '#000000',
@@ -33,47 +38,58 @@ class Module extends CModule {
         'colortags' => [
             "class\n1\n#ff0000"
         ],
-        'custom-css' => [
-            'value' => '/* Define your custom css rules */'
-        ]
+        'css' => [['action' => '', 'css' => '']]
     ];
 
-    public function getAssets(): array
-    {
+    public function getAssets(): array {
         $assets = parent::getAssets();
+        $action = APP::Component()->router->getAction();
 
-        if (($_GET['action']??'') === 'userprofile.edit') {
+        if ($action === 'userprofile.edit') {
             $assets['js'][] = 'twix-userform.js';
+        }
+
+        if ($this->preferences['state']['css']) {
+            $assets['css'][] = '../../../../zabbix.php?action=uitwix.css';
         }
 
         return $assets;
     }
 
-    public function init(): void
-    {
+    public function init(): void {
         $this->preferences = $this->getUserPreferences($this->preferences);
     }
 
-    public function onBeforeAction(Action $action): void
-    {
-        if ($action->getAction() === 'userprofile.edit') {
-            $this->tmpl = new CView('configuration.form', $this->preferences);
+    public function onBeforeAction(Action $action): void {
+        switch ($action->getAction()) {
+            case 'userprofile.edit':
+                $data = ['uitwix-csrf' => CCsrfTokenHelper::get('uitwix.form')] + $this->preferences;
+                $this->tmpl = new CView('configuration.form', $data);
+
+                break;
+
+            case 'userprofile.update':
+                if (CCsrfTokenHelper::check($_POST['uitwix-csrf']??'', 'uitwix.form')) {
+                    $this->updateUserPreferences($_POST);
+                }
+
+                break;
         }
     }
 
-    public function onTerminate(Action $action): void
-    {
+    public function onTerminate(Action $action): void {
         if ($this->tmpl) {
             echo $this->tmpl->getOutput();
         }
+
+        echo $this->css;
     }
 
     /**
      * Get user preferences.
      * Updates user profile 'uitwix' when cookie 'uitwix' value differs from profile value.
      */
-    protected function getUserPreferences(array $preferences): array
-    {
+    protected function getUserPreferences(array $preferences): array {
         $profile = CProfile::get('uitwix', '');
         $cookie = CCookieHelper::get('uitwix');
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -88,6 +104,7 @@ class Module extends CModule {
         }
 
         $preferences['state'] = array_merge($preferences['state'], array_fill_keys(explode('-', $cookie?:$profile), 1));
+        $preferences['css'] = $this->getProfileArray('css', $preferences['css']);
 
         $profile = CProfile::get('uitwix-coloring', '');
         $cookie = CCookieHelper::get('uitwix-coloring');
@@ -137,5 +154,30 @@ class Module extends CModule {
         }
 
         return $preferences;
+    }
+
+    protected function updateUserPreferences(array $input): void {
+        // TODO: tweaks enabled/disabled state.
+
+        // TODO: Body background color.
+
+        // TODO: Navigation background color.
+
+        // Custom styles.
+        $css = array_filter($input['uitwix-css']??[], fn ($css) => trim(implode('', $css)) !== '');
+        $this->setProfileArray('css', array_values($css));
+
+        // TODO: Color tags.
+    }
+
+    protected function getProfileArray(string $key, array $default_value = []): array {
+        $profile = (array) json_decode(CProfile::get("uitwix-{$key}", json_encode($default_value)), true);
+
+        return $profile;
+    }
+
+    protected function setProfileArray(string $key, array $value): void {
+        $key = "uitwix-{$key}";
+        $value ? CProfile::update($key, json_encode($value), PROFILE_TYPE_STR) : CProfile::delete($key);
     }
 }

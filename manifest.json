@@ -12,5 +12,10 @@
     "css": ["uitwix.css"],
     "js": ["twix-sticky.js", "twix-dragm.js", "twix-coloring.js", "twix-colortags.js"]
   },
-  "actions": {}
+  "actions": {
+    "uitwix.css": {
+      "class": "Css",
+      "layout": "layout.uitwix.css"
+    }
+  }
 }

@@ -12,6 +12,7 @@ echo
         ->setId('tab_uitwix')
         ->setAttribute('role', 'tab'),
     (new CDiv((new CFormGrid([
+        (new CVar('uitwix-csrf', $data['uitwix-csrf'])),
         new CLabel(_('Enable sticky filters'), 'uitwix_sticky'),
         new CFormField((new CCheckBox('uitwix[sticky]', 1))->setChecked((int) $data['state']['sticky'])),
 
@@ -38,22 +39,45 @@ echo
             ])
         ]),
 
-        new CLabel(_('Custom styles')),
+        new CLabel(_('Custom styles'), 'uitwix[state][css]'),
         (new CFormField([
-            (new CCheckBox('uitwix[state][csseditor]', 1))->setChecked((int) $data['state']['csseditor']),
-            (new CMultilineInput('uitwix[custom-css][value]', '', ['add_post_js' => false]))
-                ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
-                ->setAttribute('data-options', json_encode([
-                    'title' => _('CSS'),
-                    'placeholder' => '',
-                    'placeholder_textarea' => '',
-                    'grow' => 'auto',
-                    'rows' => 0,
-                    'value' => $data['custom-css']['value'],
-                    'maxlength' => DB::getFieldLength('profiles', 'value_str'),
-                    'readonly' => !$data['state']['csseditor']
-                ]))
-        ]))->addStyle('display: flex'),
+            (new CCheckBox('uitwix[state][css]', 1))->setChecked((int) $data['state']['css']),
+            (new CDiv([
+                (new CTable())
+                    ->setHeader([
+                        (new CCol(_('Action')))->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        new CCol(_('CSS')),
+                        ''
+                    ])
+                    ->setFooter(
+                        (new CCol(
+                            (new CButtonLink(_('Add')))->addClass('element-table-add')
+                        ))->setColSpan(3)
+                    ),
+                (new CTemplateTag(null, (new CRow([
+                        (new CTextBox('uitwix-css[#{rowNum}][action]', '#{action}'))
+                            ->removeId()
+                            ->setAttribute('placeholder', _('action'))
+                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        (new CMultilineInput('uitwix-css[#{rowNum}][css]', '', ['add_post_js' => false]))
+                            ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
+                            ->setAttribute('data-options', json_encode([
+                                'title' => _('CSS'),
+                                'grow' => 'auto',
+                                'rows' => 0,
+                                'value' => '#{css}',
+                                'maxlength' => DB::getFieldLength('profiles', 'value_str')
+                            ]))
+                            ->removeId(),
+                        (new CButtonLink(_('Remove')))->addClass('element-table-remove')
+                    ]))->addClass('form_row')
+                ))->setAttribute('data-template', ''),
+                (new CTemplateTag(null, json_encode($data['css'])))->setAttribute('data-rows', '')
+            ]))
+            ->setId('uitwix-css-table')
+            ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
+            ->addStyle('vertical-align: top')
+        ])),
 
         new CLabel(_('Color tags')),
         new CFormField(
