@@ -26,6 +26,14 @@ $(() => {
         document.body.style.setProperty(input_cssvar[e.target.getAttribute('name')], e.target.value);
     });
 
+    const css_rows = JSON.parse($nav.find('#uitwix-css-table [data-rows]').html())
+        .map(rule => {
+            // Additional stringify required for escaping multiline values.
+            let encoded = JSON.stringify(rule.css);
+
+            return {...rule, css: encoded.substring(1, encoded.length - 1)}
+        });
+
     $nav.find('#uitwix-css-table table').dynamicRows({
         template: '#uitwix-css-table [data-template]',
         dataCallback: (row) => ({action: '', css: '', ...row})
@@ -33,7 +41,7 @@ $(() => {
         const $cssinput = $(e.target).find('.form_row:last .multilineinput-control');
 
         $cssinput.multilineInput($cssinput.data('options'));
-    }).data('dynamicRows').addRows(JSON.parse($nav.find('#uitwix-css-table [data-rows]').html()));
+    }).data('dynamicRows').addRows(css_rows);
 
     $nav.find('#uitwix-colortag-table table').dynamicRows({
         template: '#colortag-row-tmpl',
