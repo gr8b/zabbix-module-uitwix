@@ -27,6 +27,24 @@ output.msg-global-footer.msg-warning { animation: pulse 1s infinite; }
 }
 ```
 
+Make silver background for host item list
+- Action value set to `action=item.list&context=host`.
+- Set the style definition below as the CSS field value.
+```css
+body {
+  background-color: silver !important;
+}
+```
+
+Increase map lables font size
+- Action value set to `map.view`
+- Set the style definition below as the CSS field value.
+```css
+svg tspan {
+  font-size: 20px !important;
+}
+```
+
 ### Development
 
 Clone repository, run `composer install` to initialize composer packages, then can use `composer run dev-watch --timeout 0` to rebuild `.css` automatically when `assets/less/uitwix.less` file is changed.

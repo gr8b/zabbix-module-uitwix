@@ -108,6 +108,7 @@ class Preferences {
             ],
             'colortags' => [
                 "class\n1\n#ff0000"
+                // ['string' => '', 'match' => 1, 'color' => '#ff0000']
             ],
             'css' => [['action' => '', 'css' => '']]
         ];
