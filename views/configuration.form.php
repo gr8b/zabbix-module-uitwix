@@ -55,7 +55,7 @@ echo
                         ))->setColSpan(3)
                     ),
                 (new CTemplateTag(null, (new CRow([
-                        (new CTextBox('uitwix-css[#{rowNum}][action]', '#{action}'))
+                        (new CTextBox('uitwix-css[#{rowNum}][action]', '#{*action}'))
                             ->removeId()
                             ->setAttribute('placeholder', _('action'))
                             ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
@@ -65,7 +65,7 @@ echo
                                 'title' => _('CSS'),
                                 'grow' => 'auto',
                                 'rows' => 0,
-                                'value' => '#{css}',
+                                'value' => '#{*css}',
                                 'maxlength' => DB::getFieldLength('profiles', 'value_str')
                             ]))
                             ->removeId(),
