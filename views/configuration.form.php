@@ -45,6 +45,7 @@ echo
             (new CDiv([
                 (new CTable())
                     ->setHeader([
+                        '',
                         (new CColHeader(_('Action')))->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
                         new CColHeader(_('CSS')),
                         ''
@@ -55,10 +56,11 @@ echo
                         ))->setColSpan(3)
                     ),
                 (new CTemplateTag(null, (new CRow([
+                        (new CCol((new CDiv())->addClass(ZBX_STYLE_DRAG_ICON)))->addClass(ZBX_STYLE_TD_DRAG_ICON),
                         (new CTextBox('uitwix-css[#{rowNum}][action]', '#{*action}'))
                             ->removeId()
                             ->setAttribute('placeholder', _('action'))
-                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                            ->setWidth(ZBX_TEXTAREA_MEDIUM_WIDTH),
                         (new CMultilineInput('uitwix-css[#{rowNum}][css]', '', ['add_post_js' => false]))
                             ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
                             ->setAttribute('data-options', json_encode([

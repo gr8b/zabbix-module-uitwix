@@ -45,6 +45,8 @@ svg tspan {
 }
 ```
 
+You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.
+
 ### Development
 
 Clone repository, run `composer install` to initialize composer packages, then can use `composer run dev-watch --timeout 0` to rebuild `.css` automatically when `assets/less/uitwix.less` file is changed.
