@@ -25,7 +25,7 @@ class Css extends CController {
         $preferences = (new Preferences)->get();
 
         $this->setResponse((new CControllerResponseData([
-            'css' => $this->getCssForAction($args, $preferences['css'])
+            'css' => $this->getCssForAction($args, $preferences)
         ])));
     }
 
@@ -33,11 +33,12 @@ class Css extends CController {
      * Get custom styles matched passed$action.
      *
      * @param string $query_args
-     * @param array  $css_mappings
+     * @param array  $preferences
      */
-    protected function getCssForAction(array $query_args, array $css_mappings): string {
+    protected function getCssForAction(array $query_args, array $preferences): string {
         $css = [];
         $action = $query_args['action']??'';
+        $css_mappings = $preferences['state']['css'] ? $preferences['css'] : [];
 
         foreach ($css_mappings as $css_mapping) {
             if ($css_mapping['action'] === '' || $css_mapping['action'] === $action) {
@@ -52,6 +53,30 @@ class Css extends CController {
             if ($action_args && !array_diff_assoc($action_args, $query_args)) {
                 $css[] = "/* {$css_mapping['action']} */";
                 $css[] = $css_mapping['css'];
+            }
+        }
+
+        $tags = $preferences['state']['colortags'] ? $preferences['colortags'] : [];
+
+        foreach ($tags as $tag) {
+            $rule = '';
+
+            switch ($tag['match']) {
+                case Preferences::MATCH_BEGIN:
+                    $rule = '.tag[data-hintbox-contents^="%1$s"] { background-color: %2$s }';
+                    break;
+
+                case Preferences::MATCH_CONTAIN:
+                    $rule = '.tag[data-hintbox-contents*="%1$s"] { background-color: %2$s }';
+                    break;
+
+                case Preferences::MATCH_END:
+                    $rule = '.tag[data-hintbox-contents$="%1$s"] { background-color: %2$s }';
+                    break;
+            }
+
+            if ($rule !== '') {
+                $css[] = sprintf($rule, $tag['value'], $tag['color']);
             }
         }
 

@@ -25,7 +25,7 @@ class Module extends CModule {
             $assets['js'][] = 'twix-userform.js';
         }
 
-        if ($preferences['state']['css']) {
+        if ($preferences['state']['css'] || $preferences['state']['colortags']) {
             $assets['css'][] = '../../../../zabbix.php?action=uitwix.css';
         }
 

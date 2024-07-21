@@ -59,7 +59,6 @@ $(() => {
     $nav.closest('form').on('submit', e => {
         let checkboxes = [];
         let colors = [];
-        let colortags = [];
 
         for (const checkbox of [...document.querySelectorAll('[name^="uitwix["]:checked')]) {
             const name = checkbox.getAttribute('name').match(/.+\[(.+)\]/)[1];
@@ -73,20 +72,7 @@ $(() => {
             colors.push(`${name}:${color.value}`);
         }
 
-        for (const row of [...document.querySelectorAll('#uitwix-colortag-table table tr.form_row')]) {
-            const value = row.querySelector('input[name$="[string]"]').value;
-
-            if ($.trim(value) !== '') {
-                colortags.push(`${value}\n${
-                    row.querySelector('input[name$="[match]"]').value
-                }\n${
-                    row.querySelector('input[name$="[color]"]').value
-                }`);
-            }
-        }
-
         document.cookie = `uitwix=${encodeURIComponent(checkboxes.join('-'))}`;
         document.cookie = `uitwix-coloring=${encodeURIComponent(colors.join('-'))}`;
-        document.cookie = `uitwix-colortags=${encodeURIComponent(colortags.join("\n"))}`;
     })
 });

@@ -4,6 +4,7 @@
  * @param $this CView
  */
 
+use Modules\UITwix\Services\Preferences;
 
 echo
     (new CTag('script', true))->setAttribute('src', 'jsLoader.php?files[]=multilineinput.js'),
@@ -37,6 +38,47 @@ echo
                     _('Navigation background color')
                 ]))->addClass(!!$data['state']['asidebg'] ? null : ZBX_STYLE_DISABLED)
             ])
+        ]),
+
+        new CLabel(_('Color tags')),
+        new CFormField([
+            (new CCheckBox('uitwix[state][colortags]', 1))->setChecked((int) $data['state']['colortags']),
+            (new CDiv([
+                (new CTable())
+                    ->setHeader([
+                        new CColHeader(_('Match')),
+                        new CColHeader(_('String')),
+                        '',
+                        ''
+                    ])
+                    ->setFooter(
+                        (new CCol(
+                            (new CButtonLink(_('Add')))->addClass('element-table-add')
+                        ))->setColSpan(4)
+                    ),
+                new CTemplateTag('colortag-row-tmpl', (new CRow([
+                        (new CSelect('uitwix-colortag[#{rowNum}][match]'))
+                            ->removeId()
+                            ->addOptions(CSelect::createOptionsFromArray([
+                                Preferences::MATCH_BEGIN => _('Starts with'),
+                                Preferences::MATCH_CONTAIN => _('Contains'),
+                                Preferences::MATCH_END => _('Ends with')
+                            ]))
+                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        (new CTextBox('uitwix-colortag[#{rowNum}][value]', '#{value}'))
+                            ->removeId()
+                            ->setAttribute('placeholder', _('value'))
+                            ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH),
+                        (new CLabel([
+                            (new CInput('color', 'uitwix-colortag[#{rowNum}][color]', '#{color}'))->removeId()
+                        ])),
+                        (new CButtonLink(_('Remove')))->addClass('element-table-remove')
+                    ]))->addClass('form_row')
+                ),
+                new CTemplateTag('colortag-data', json_encode($data['colortags']))
+            ]))
+                ->setId('uitwix-colortag-table')
+                ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
         ]),
 
         new CLabel(_('Custom styles'), 'uitwix[state][css]'),
@@ -79,47 +121,6 @@ echo
             ->setId('uitwix-css-table')
             ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
             ->addStyle('vertical-align: top')
-        ]),
-
-        new CLabel(_('Color tags')),
-        new CFormField([
-            (new CCheckBox('uitwix[state][colortags]', 1))->setChecked((int) $data['state']['colortags']),
-            (new CDiv([
-                (new CTable())
-                    ->setHeader([
-                        new CColHeader(_('Match')),
-                        new CColHeader(_('String')),
-                        '',
-                        ''
-                    ])
-                    ->setFooter(
-                        (new CCol(
-                            (new CButtonLink(_('Add')))->addClass('element-table-add')
-                        ))->setColSpan(4)
-                    ),
-                new CTemplateTag('colortag-row-tmpl', (new CRow([
-                        (new CSelect('uitwix-colortag[#{rowNum}][match]'))
-                            ->removeId()
-                            ->addOptions(CSelect::createOptionsFromArray([
-                                1 => _('Starts with'),
-                                2 => _('Contains'),
-                                3 => _('Ends with')
-                            ]))
-                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
-                        (new CTextBox('uitwix-colortag[#{rowNum}][string]', '#{string}'))
-                            ->removeId()
-                            ->setAttribute('placeholder', _('value'))
-                            ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH),
-                        (new CLabel([
-                            (new CInput('color', 'uitwix-colortag[#{rowNum}][color]', '#{color}'))->removeId()
-                        ])),
-                        (new CButtonLink(_('Remove')))->addClass('element-table-remove')
-                    ]))->addClass('form_row')
-                ),
-                new CTemplateTag('colortag-data', json_encode($data['colortags']))
-            ]))
-                ->setId('uitwix-colortag-table')
-                ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
         ])
     ]))))
         ->setId('uitwix')

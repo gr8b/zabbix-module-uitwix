@@ -10,6 +10,10 @@ class Preferences {
     const PROFILE_KEY_FORMAT = 'uitwix-%1$s';
     const PROFILE_COOKIE = 'uitwix';
 
+    const MATCH_BEGIN = 1;
+    const MATCH_CONTAIN = 2;
+    const MATCH_END = 3;
+
     public function get(): array {
         $preferences = $this->getDefault();
         $profile = CProfile::get('uitwix', '');
@@ -26,7 +30,6 @@ class Preferences {
         }
 
         $preferences['state'] = array_merge($preferences['state'], array_fill_keys(explode('-', $cookie?:$profile), 1));
-        $preferences['css'] = $this->getProfileArray('css', $preferences['css']);
 
         $profile = CProfile::get('uitwix-coloring', '');
         $cookie = CCookieHelper::get('uitwix-coloring');
@@ -48,32 +51,11 @@ class Preferences {
 
         $preferences['color'] = array_merge($preferences['color'], $colors);
 
-        // Color tags.
-        $profile = CProfile::get('uitwix-colortags', '');
-        $cookie = CCookieHelper::get('uitwix-colortags');
+        // Color tags
+        $preferences['colortags'] = $this->getProfileArray('colortags', $preferences['colortags']);
 
-        if ($cookie !== null && $cookie !== $profile) {
-            CProfile::update('uitwix-colortags', $cookie, PROFILE_TYPE_STR);
-        }
-
-        if ($cookie === null) {
-            setcookie('uitwix-colortags', $profile, 0, $path);
-        }
-
-        $preferences['colortags'] = [];
-        $colortags = explode("\n", $cookie?:$profile);
-
-        foreach (array_chunk($colortags, 3) as $colortag) {
-            [$string, $match, $color] = $colortag + ['', '', ''];
-
-            if ($string !== '' && $match && $color !== '') {
-                $preferences['colortags'][] = compact('string', 'match', 'color');
-            }
-        }
-
-        if (!$preferences['colortags']) {
-            $preferences['colortags'][] = ['string' => '', 'match' => 1, 'color' => '#ff0000'];
-        }
+        // Custom .css
+        $preferences['css'] = $this->getProfileArray('css', $preferences['css']);
 
         return $preferences;
     }
@@ -89,7 +71,9 @@ class Preferences {
         $css = array_filter($preferences['uitwix-css']??[], fn ($css) => trim(implode('', $css)) !== '');
         $this->setProfileArray('css', array_values($css));
 
-        // TODO: Color tags.
+        // Color tags.
+        $tags = array_filter($preferences['uitwix-colortag']??[], fn ($tag) => trim($tag['value']??'') !== '');
+        $this->setProfileArray('colortags', array_values($tags));
     }
 
     public function getDefault(): array {
@@ -107,8 +91,7 @@ class Preferences {
                 'asidebg' => '#403030'
             ],
             'colortags' => [
-                "class\n1\n#ff0000"
-                // ['string' => '', 'match' => 1, 'color' => '#ff0000']
+                ['value' => '', 'match' => Preferences::MATCH_BEGIN, 'color' => '#ff0000']
             ],
             'css' => [['action' => '', 'css' => '']]
         ];

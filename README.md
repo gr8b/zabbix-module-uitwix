@@ -10,8 +10,8 @@
 - Allow users to manually reposition modal windows within the body area.\
   _Please note that manually changing the position of the modal window is not saved._
 - Modify main navigation color scheme and background color.
-- Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
 - Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
+- Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
 
 ### Examples
 
