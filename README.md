@@ -11,6 +11,41 @@
   _Please note that manually changing the position of the modal window is not saved._
 - Modify main navigation color scheme and background color.
 - Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
+- Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
+
+### Examples
+
+Make server status message flash
+- Leave the Action field empty, to include CSS on every page.
+- Set the style definition below as the CSS field value.
+```css
+output.msg-global-footer.msg-warning { animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { border-color: #f4af25; }
+  50% { border-color: red; background-color: red; }
+}
+```
+
+Make silver background for host item list
+- Action value set to `action=item.list&context=host`.
+- Set the style definition below as the CSS field value.
+```css
+body {
+  background-color: silver !important;
+}
+```
+
+Increase map lables font size
+- Action value set to `map.view`
+- Set the style definition below as the CSS field value.
+```css
+svg tspan {
+  font-size: 20px !important;
+}
+```
+
+You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.
 
 ### Development
 

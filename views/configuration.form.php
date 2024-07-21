@@ -4,12 +4,16 @@
  * @param $this CView
  */
 
+use Modules\UITwix\Services\Preferences;
 
-echo new CTemplateTag('uitwix-tmpl', [
+echo
+    (new CTag('script', true))->setAttribute('src', 'jsLoader.php?files[]=multilineinput.js'),
+    new CTemplateTag('uitwix-tmpl', [
     (new CListItem((new CLink(_('UI Twix'), '#uitwix'))))
         ->setId('tab_uitwix')
         ->setAttribute('role', 'tab'),
     (new CDiv((new CFormGrid([
+        (new CVar('uitwix-csrf', $data['uitwix-csrf'])),
         new CLabel(_('Enable sticky filters'), 'uitwix_sticky'),
         new CFormField((new CCheckBox('uitwix[sticky]', 1))->setChecked((int) $data['state']['sticky'])),
 
@@ -37,12 +41,13 @@ echo new CTemplateTag('uitwix-tmpl', [
         ]),
 
         new CLabel(_('Color tags')),
-        (new CFormField(
+        new CFormField([
+            (new CCheckBox('uitwix[state][colortags]', 1))->setChecked((int) $data['state']['colortags']),
             (new CDiv([
                 (new CTable())
                     ->setHeader([
-                        (new CCol(_('String')))->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
-                        new CCol(_('Match')),
+                        new CColHeader(_('Match')),
+                        new CColHeader(_('String')),
                         '',
                         ''
                     ])
@@ -52,15 +57,18 @@ echo new CTemplateTag('uitwix-tmpl', [
                         ))->setColSpan(4)
                     ),
                 new CTemplateTag('colortag-row-tmpl', (new CRow([
-                        (new CTextBox('uitwix-colortag[#{rowNum}][string]', '#{string}'))
+                        (new CSelect('uitwix-colortag[#{rowNum}][match]'))
+                            ->removeId()
+                            ->addOptions(CSelect::createOptionsFromArray([
+                                Preferences::MATCH_BEGIN => _('Starts with'),
+                                Preferences::MATCH_CONTAIN => _('Contains'),
+                                Preferences::MATCH_END => _('Ends with')
+                            ]))
+                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        (new CTextBox('uitwix-colortag[#{rowNum}][value]', '#{value}'))
                             ->removeId()
                             ->setAttribute('placeholder', _('value'))
-                            ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
-                        (new CSelect('uitwix-colortag[#{rowNum}][match]'))->addOptions(CSelect::createOptionsFromArray([
-                            1 => _('Starts with'),
-                            2 => _('Contains'),
-                            3 => _('Ends with')
-                        ]))->removeId(),
+                            ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH),
                         (new CLabel([
                             (new CInput('color', 'uitwix-colortag[#{rowNum}][color]', '#{color}'))->removeId()
                         ])),
@@ -71,7 +79,49 @@ echo new CTemplateTag('uitwix-tmpl', [
             ]))
                 ->setId('uitwix-colortag-table')
                 ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
-        ))
+        ]),
+
+        new CLabel(_('Custom styles'), 'uitwix[state][css]'),
+        new CFormField([
+            (new CCheckBox('uitwix[state][css]', 1))->setChecked((int) $data['state']['css']),
+            (new CDiv([
+                (new CTable())
+                    ->setHeader([
+                        '',
+                        (new CColHeader(_('Action')))->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
+                        new CColHeader(_('CSS')),
+                        ''
+                    ])
+                    ->setFooter(
+                        (new CCol(
+                            (new CButtonLink(_('Add')))->addClass('element-table-add')
+                        ))->setColSpan(3)
+                    ),
+                (new CTemplateTag(null, (new CRow([
+                        (new CCol((new CDiv())->addClass(ZBX_STYLE_DRAG_ICON)))->addClass(ZBX_STYLE_TD_DRAG_ICON),
+                        (new CTextBox('uitwix-css[#{rowNum}][action]', '#{*action}'))
+                            ->removeId()
+                            ->setAttribute('placeholder', _('action'))
+                            ->setWidth(ZBX_TEXTAREA_MEDIUM_WIDTH),
+                        (new CMultilineInput('uitwix-css[#{rowNum}][css]', '', ['add_post_js' => false]))
+                            ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
+                            ->setAttribute('data-options', json_encode([
+                                'title' => _('CSS'),
+                                'grow' => 'auto',
+                                'rows' => 0,
+                                'value' => '#{*css}',
+                                'maxlength' => DB::getFieldLength('profiles', 'value_str')
+                            ]))
+                            ->removeId(),
+                        (new CButtonLink(_('Remove')))->addClass('element-table-remove')
+                    ]))->addClass('form_row')
+                ))->setAttribute('data-template', ''),
+                (new CTemplateTag(null, json_encode($data['css'])))->setAttribute('data-rows', '')
+            ]))
+            ->setId('uitwix-css-table')
+            ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
+            ->addStyle('vertical-align: top')
+        ])
     ]))))
         ->setId('uitwix')
         ->setAttribute('role', 'tabpanel')

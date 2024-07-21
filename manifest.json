@@ -10,7 +10,12 @@
   "version": "1.0",
   "assets": {
     "css": ["uitwix.css"],
-    "js": ["twix-sticky.js", "twix-dragm.js", "twix-coloring.js", "twix-colortags.js"]
+    "js": ["twix-sticky.js", "twix-dragm.js", "twix-coloring.js"]
   },
-  "actions": {}
+  "actions": {
+    "uitwix.css": {
+      "class": "Css",
+      "layout": "layout.uitwix.css"
+    }
+  }
 }
