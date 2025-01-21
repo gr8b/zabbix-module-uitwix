@@ -13,6 +13,12 @@
 - Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
 - Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
 
+
+### Video
+
+[![Watch the video](https://img.youtube.com/vi/Sce15yF6aE0/0.jpg)](https://www.youtube.com/watch?v=Sce15yF6aE0)
+
+
 #### User defined CSS style
 
 Parameter action support different type of matching against page URL.
