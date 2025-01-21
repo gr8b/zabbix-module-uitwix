@@ -4,6 +4,7 @@ namespace Modules\UITwix\Actions;
 
 use CController;
 use CControllerResponseData;
+use CWebUser;
 use Modules\UITwix\Services\Preferences;
 
 class Css extends CController {
@@ -21,42 +22,72 @@ class Css extends CController {
     }
 
     public function doAction() {
-        parse_str(parse_url($_SERVER['HTTP_REFERER']??'', PHP_URL_QUERY), $args);
         $preferences = (new Preferences)->get();
+        $uri = $_SERVER['HTTP_REFERER'] ?? '';
 
         $this->setResponse((new CControllerResponseData([
-            'css' => $this->getCssForAction($args, $preferences)
+            'css' => $this->getCssForAction($uri, $preferences)
         ])));
     }
 
     /**
      * Get custom styles matched passed$action.
      *
-     * @param string $query_args
+     * @param string $uri
      * @param array  $preferences
      */
-    protected function getCssForAction(array $query_args, array $preferences): string {
+    protected function getCssForAction(string $uri, array $preferences): string {
         $css = [];
+        $debug = CWebUser::getDebugMode();
+        parse_str(parse_url($uri, PHP_URL_QUERY), $query_args);
         $action = $query_args['action']??'';
         $css_mappings = $preferences['state']['css'] ? $preferences['css'] : [];
 
+        if ($action === '') {
+            $action = basename(parse_url($uri, PHP_URL_PATH));
+            $query_args['action'] = $action;
+        }
+
+        if ($debug) {
+            $css[] = "/* uri: {$uri} */";
+            $css[] = "/* action: {$action} */";
+        }
+
         foreach ($css_mappings as $css_mapping) {
             if ($css_mapping['action'] === '' || $css_mapping['action'] === $action) {
-                $css[] = "/* {$css_mapping['action']} */";
+                $css[] = $debug ? "/* apply: {$css_mapping['action']} */" : '';
                 $css[] = $css_mapping['css'];
+
+                continue;
+            }
+            else if (strtolower(substr($css_mapping['action'], 0, 6)) === 'regex:') {
+                if (preg_match(substr($css_mapping['action'], 6), $uri) === 1) {
+                    $css[] = $debug ? "/* apply: {$css_mapping['action']} */" : '';
+                    $css[] = $css_mapping['css'];
+                }
+                else if ($debug) {
+                    $css[] = "/* skip: {$css_mapping['action']} */";
+                }
 
                 continue;
             }
 
             parse_str($css_mapping['action'], $action_args);
 
-            if ($action_args && !array_diff_assoc($action_args, $query_args)) {
-                $css[] = "/* {$css_mapping['action']} */";
+            /* @ is used to hide warnings thrown when string is compared against array */
+            if ($action_args && !@array_diff_assoc($action_args, $query_args)) {
+                $css[] = $debug ? "/* apply: {$css_mapping['action']} */" : '';
                 $css[] = $css_mapping['css'];
+            }
+            else if ($debug) {
+                $css[] = "/* skip: {$css_mapping['action']} */";
             }
         }
 
         $tags = $preferences['state']['colortags'] ? $preferences['colortags'] : [];
+        if ($debug) {
+            $css[] = '/* tags css */';
+        }
 
         foreach ($tags as $tag) {
             $rule = '';

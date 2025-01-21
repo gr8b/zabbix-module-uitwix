@@ -13,6 +13,25 @@
 - Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
 - Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
 
+#### User defined CSS style
+
+Parameter action support different type of matching against page URL.
+|Type |Example |Description |
+|-----|--------|------------|
+|request URL arguments|`action=item.list&context=host`|Add style when page URL contain both `action` and `context` arguments.|
+|regex matching|`regex: /host_discovery\.php/`|Perform regex match and add style when page URL contain `host_discovery.php` substring.|
+
+When Zabbix debug mode is enabled additional debug information will be added to the body of generated `.css` returned by URL `zabbix.php?action=uitwix.css`.
+
+```css
+/* uri: http://z.git/release/7.0/ui/host_discovery.php?context=host&filter_hostids%5B%5D=10084 */
+/* action: host_discovery.php */
+/* skip: regex: /context\=template/ */
+/* apply: action=host_discovery.php */
+body { background-color: green !important; }
+/* skip: action=triggers.list&context=host&filter_hostids%5B0%5D= */
+```
+
 ### Examples
 
 Make server status message flash
@@ -45,7 +64,15 @@ svg tspan {
 }
 ```
 
-You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.
+Make background color differ on template and host pages
+- Action value set to `regex: /context\=template/`
+- Set the style definition below as the CSS field value.
+```css
+body { background-color: rgb(235, 235, 240) }
+html[color-scheme="dark"] body { background-color: rgb(26, 26, 26) }
+```
+
+You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.\
 
 ### Development
 
