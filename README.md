@@ -17,6 +17,7 @@
 ### Video
 
 [![Watch the video](https://img.youtube.com/vi/Sce15yF6aE0/0.jpg)](https://www.youtube.com/watch?v=Sce15yF6aE0)
+[![Watch the video](https://img.youtube.com/vi/WfKLvZSd6OM/0.jpg)](https://www.youtube.com/watch?v=WfKLvZSd6OM&t=101s)
 
 
 #### User defined CSS style
