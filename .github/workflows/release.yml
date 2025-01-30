@@ -53,7 +53,7 @@ jobs:
           # run composer build script if it is defined in composer.json exists
           [ -f "composer.json" ] && [ "$(jq -r '.scripts.build' composer.json 2>/dev/null)" != "null" ] && composer run build
 
-          zip -r "bin/zabbix-module-${MODULE_NAME}-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views
+          zip -r "bin/zabbix-module-${MODULE_NAME}-6.4-7.0.zip" manifest.json Module.php assets/css assets/js helpers actions views services
 
       - name: Generate release notes
         if: ${{ hashFiles('RELEASE_NOTES.md') != '' && hashFiles('bin/*.zip') != '' }}
