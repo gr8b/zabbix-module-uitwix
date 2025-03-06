@@ -57,6 +57,9 @@ class Preferences {
         // Custom .css
         $preferences['css'] = $this->getProfileArray('css', $preferences['css']);
 
+        $key = sprintf(static::PROFILE_KEY_FORMAT, 'noredirect');
+        $preferences[$key] = CProfile::get($key, 0);
+
         return $preferences;
     }
 
@@ -74,6 +77,11 @@ class Preferences {
         // Color tags.
         $tags = array_filter($preferences['uitwix-colortag']??[], fn ($tag) => trim($tag['value']??'') !== '');
         $this->setProfileArray('colortags', array_values($tags));
+
+        // Prevent redirect after user profile form successfull update.
+        $key = sprintf(static::PROFILE_KEY_FORMAT, 'noredirect');
+        ($preferences[$key] ?? 0)
+            ? CProfile::update($key, $preferences[$key], PROFILE_TYPE_STR) : CProfile::deleteIdx($key);
     }
 
     public function getDefault(): array {

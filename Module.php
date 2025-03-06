@@ -8,6 +8,7 @@ use CController as Action;
 use CCsrfTokenHelper;
 use Zabbix\Core\CModule;
 use Modules\UITwix\Services\Preferences;
+use Modules\UITwix\Services\FormRedirectFilterService;
 
 class Module extends CModule {
 
@@ -40,6 +41,10 @@ class Module extends CModule {
         if ($action->getAction() === 'userprofile.update'
                 && CCsrfTokenHelper::check($_POST['uitwix-csrf']??'', 'uitwix.form')) {
             $this->preferences->set($_POST);
+
+            if ($_POST['uitwix-noredirect'] ?? 0) {
+                FormRedirectFilterService::start();
+            }
         }
     }
 

@@ -121,7 +121,12 @@ echo
             ->setId('uitwix-css-table')
             ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
             ->addStyle('vertical-align: top')
-        ])
+        ]),
+
+        new CLabel(_('Prevent redirect after update'), 'uitwix-noredirect'),
+        new CFormField(
+            (new CCheckBox('uitwix-noredirect', 1))->setChecked((int) $data['uitwix-noredirect'])
+        )
     ]))))
         ->setId('uitwix')
         ->setAttribute('role', 'tabpanel')
