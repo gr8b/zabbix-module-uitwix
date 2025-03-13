@@ -56,6 +56,8 @@ $(() => {
         dataCallback: (row) => ({color: '#000000', ...row})
     });
 
+    initCodeHighlight('uitwix-ace-playground');
+
     $nav.closest('form').on('submit', e => {
         let checkboxes = [];
         let colors = [];
@@ -75,4 +77,21 @@ $(() => {
         document.cookie = `uitwix=${encodeURIComponent(checkboxes.join('-'))}`;
         document.cookie = `uitwix-coloring=${encodeURIComponent(colors.join('-'))}`;
     })
+
+    function initCodeHighlight(containerid) {
+        const editor = ace.edit(containerid, {
+            mode: 'ace/mode/javascript',
+            theme: 'ace/theme/twilight',
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            showGutter: true,
+            tooltipFollowsMouse: true
+        });
+
+        // editor.session.setMode('ace/mode/javascript');
+        // editor.setTheme('ace/theme/twilight');
+        // editor.setTheme('');// to switch from twilight to default light theme
+
+        editor.session.setUseWorker(true);
+    }
 });

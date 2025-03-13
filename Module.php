@@ -30,6 +30,16 @@ class Module extends CModule {
             $assets['css'][] = '../../../../zabbix.php?action=uitwix.css';
         }
 
+        $assets['js'][] = 'ace.1.5.0/ace.js';
+
+        $assets['js'][] = 'ace.1.5.0/ext-language_tools.js';
+
+        $assets['js'][] = 'ace.1.5.0/worker-base.js';
+        $assets['js'][] = 'ace.1.5.0/worker-javascript.js';
+        $assets['js'][] = 'ace.1.5.0/mode-javascript.js';
+
+        $assets['js'][] = 'ace.1.5.0/theme-twilight.js';
+
         return $assets;
     }
 

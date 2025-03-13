@@ -123,6 +123,20 @@ echo
             ->addStyle('vertical-align: top')
         ]),
 
+        new CLabel(_('Code highlight')),
+        new CFormField(
+            (new CDiv(implode("\n", [
+                '// Playground',
+                'function foo(items) {',
+                '    let x = "Syntax highlight test";',
+                '',
+                '    return x;',
+                '}'
+            ])))
+                ->setId('uitwix-ace-playground')
+                ->addStyle('width: 50%; height: 150px')
+        ),
+
         new CLabel(_('Prevent redirect after update'), 'uitwix-noredirect'),
         new CFormField(
             (new CCheckBox('uitwix-noredirect', 1))->setChecked((int) $data['uitwix-noredirect'])
