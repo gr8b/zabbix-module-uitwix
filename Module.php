@@ -37,6 +37,8 @@ class Module extends CModule {
         $assets['js'][] = 'ace.1.5.0/worker-base.js';
         $assets['js'][] = 'ace.1.5.0/worker-javascript.js';
         $assets['js'][] = 'ace.1.5.0/mode-javascript.js';
+        $assets['js'][] = 'ace.1.5.0/worker-css.js';
+        $assets['js'][] = 'ace.1.5.0/mode-css.js';
 
         $assets['js'][] = 'ace.1.5.0/theme-twilight.js';
 
