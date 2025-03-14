@@ -12,6 +12,8 @@
 - Modify main navigation color scheme and background color.
 - Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
 - Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
+- Syntax highlight for javascript and css fields:
+  - item and item prototype fields: script, browser_script, preprocessing parameters
 
 
 ### Video
@@ -77,6 +79,14 @@ Make background color differ on template and host pages
 ```css
 body { background-color: rgb(235, 235, 240) }
 html[color-scheme="dark"] body { background-color: rgb(26, 26, 26) }
+```
+
+Customize editor, with syntax highlight, font size
+```css
+/* Ace editor styles */
+.ace_editor {
+    font-size: 15px !important;
+}
 ```
 
 You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.\
