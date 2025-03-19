@@ -85,6 +85,9 @@
 .uitwix-sticky.header-navigation {
   z-index: 101;
 }
+#uitwix {
+  margin-bottom: 10px;
+}
 #uitwix input[type="color"] {
   padding: 0;
   border: 0;

@@ -13,9 +13,16 @@
     "js": ["twix-sticky.js", "twix-dragm.js", "twix-coloring.js", "twix-ace.js"]
   },
   "actions": {
-    "uitwix.css": {
+    "mod.uitwix.css": {
       "class": "Css",
       "layout": "layout.uitwix.css"
+    },
+    "mod.uitwix.form": {
+      "class": "ConfigurationForm",
+      "view": "mod.uitwix.form"
+    },
+    "mod.uitwix.form.update": {
+      "class": "ConfigurationFormUpdate"
     }
   }
 }

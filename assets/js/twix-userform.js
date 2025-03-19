@@ -1,10 +1,5 @@
 $(() => {
-    const tmpl = document.querySelector('#uitwix-tmpl');
-    const $nav = $('#tabs');
-
-    $nav.find('.ui-tabs-nav').append(tmpl.content.querySelector('#tab_uitwix'));
-    $nav.find('[role="tabpanel"]:last').after(tmpl.content.querySelector('#uitwix'));
-    $nav.tabs('refresh');
+    const $nav = $('#uitwix');
 
     $nav.on('click', '[name="uitwix[bodybg]"],[name="uitwix[asidebg]"]', e => {
         const input = e.target.parentNode.querySelector('input[type="color"]');
@@ -79,18 +74,21 @@ $(() => {
     })
 
     function initCodeHighlight(containerid) {
+        const theme = document.documentElement.getAttribute('color-scheme') === 'dark' ? 'ace/theme/twilight' : '';
         const editor = ace.edit(containerid, {
             mode: 'ace/mode/javascript',
-            theme: 'ace/theme/twilight',
+            theme,
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true,
             showGutter: true,
             tooltipFollowsMouse: true
         });
 
+        document.querySelector('[name="uitwix[syntax][enabled]"]').addEventListener('change', e => {
+            editor.setOption('readOnly', !e.target.checked);
+            editor.renderer.$cursorLayer.element.style.display = editor.getReadOnly() ? 'none' : '';
+        });
         // editor.session.setMode('ace/mode/javascript');
-        // editor.setTheme('ace/theme/twilight');
-        // editor.setTheme('');// to switch from twilight to default light theme
 
         editor.session.setUseWorker(true);
     }

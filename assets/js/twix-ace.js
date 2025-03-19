@@ -1,6 +1,7 @@
 ($ => {
+    const theme = document.documentElement.getAttribute('color-scheme') === 'dark' ? 'ace/theme/twilight' : '';
     const ace_settings = {
-        theme: 'ace/theme/twilight',
+        theme,
         maxLines: Infinity,
         minLines: 7,
         autoScrollEditorIntoView: true,

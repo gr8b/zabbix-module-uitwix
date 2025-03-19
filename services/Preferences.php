@@ -60,6 +60,10 @@ class Preferences {
         $key = sprintf(static::PROFILE_KEY_FORMAT, 'noredirect');
         $preferences[$key] = CProfile::get($key, 0);
 
+        $preferences['syntax'] = [
+            'enabled' => true
+        ];
+
         return $preferences;
     }
 
@@ -101,7 +105,8 @@ class Preferences {
             'colortags' => [
                 ['value' => '', 'match' => Preferences::MATCH_BEGIN, 'color' => '#ff0000']
             ],
-            'css' => [['action' => '', 'css' => '']]
+            'css' => [['action' => '', 'css' => '']],
+            'syntax' => ['enabled' => false]
         ];
     }
 
