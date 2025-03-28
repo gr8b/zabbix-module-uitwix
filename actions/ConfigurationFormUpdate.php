@@ -3,7 +3,7 @@
 namespace Modules\UITwix\Actions;
 
 use CController, CControllerResponseRedirect, CUrl;
-use CMessageHelper, CCsrfTokenHelper;
+use CMessageHelper;
 use Modules\UITwix\Services\Preferences;
 
 class ConfigurationFormUpdate extends CController {
@@ -12,7 +12,7 @@ class ConfigurationFormUpdate extends CController {
         $fields = [
             'state' =>      'array',
             'color' =>      'array',
-            'colortags' =>  'array',
+            'colortag' =>   'array',
             'css' =>        'array',
             'syntax' =>     'array'
         ];

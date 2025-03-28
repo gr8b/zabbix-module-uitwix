@@ -1,6 +1,6 @@
 ## UI Twix
 
-![](doc/user-profile.png)
+![](doc/uitwix.png)
 
 [![Latest Release](https://img.shields.io/github/v/release/gr8b/zabbix-module-uitwix)](https://github.com/gr8b/zabbix-module-uitwix/releases)
 
@@ -82,10 +82,38 @@ html[color-scheme="dark"] body { background-color: rgb(26, 26, 26) }
 ```
 
 Customize editor, with syntax highlight, font size
+- Leave the Action field empty, to include CSS on every page.
+- Set the style definition below as the CSS field value.
 ```css
 /* Ace editor styles */
 .ace_editor {
     font-size: 15px !important;
+}
+```
+
+Make widget tables header row sticky
+- Action value set to `action=dashboard.view`
+- Set the style definition below as the CSS field value.
+```css
+.dashboard-grid-widget-body > .list-table thead th,
+.dashboard-grid-widget-body > .list-table thead .timeline-th {
+    position: sticky;
+    top: 0;
+    background-color:#2b2b2b;
+    z-index: 1000;
+}
+```
+
+Use custom sidebar color for other UI elements
+- Leave the Action field empty, to include CSS on every page.
+- Set the style definition below as the CSS field value.
+```css
+[uitwix-coloring-body="on"] {
+    .table-forms-container,
+    .overlay-dialogue.modal-popup, .overlay-dialogue.modal-popup .ui-tabs-nav,
+    header.header-title {
+        background-color: var(--uitwix-sidebar-bgcolor);
+    }
 }
 ```
 

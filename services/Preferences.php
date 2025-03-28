@@ -3,7 +3,6 @@
 namespace Modules\UITwix\Services;
 
 use CProfile;
-use CCookieHelper;
 
 class Preferences {
 
@@ -16,76 +15,59 @@ class Preferences {
 
     public function get(): array {
         $preferences = $this->getDefault();
-        $profile = CProfile::get('uitwix', '');
-        $cookie = CCookieHelper::get(static::PROFILE_COOKIE);
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $path = rtrim(substr($path, 0, strrpos($path, '/')), '/');
 
-        if ($cookie !== null && $cookie !== $profile) {
-            CProfile::update('uitwix', $cookie, PROFILE_TYPE_STR);
-        }
+        // Enabled UI Twix preferences.
+        $enabled_keys = array_filter(explode('-', CProfile::get('uitwix', '')), 'strlen');
+        $enabled_keys = array_fill_keys($enabled_keys, 1);
+        $enabled_keys = array_intersect_key($enabled_keys, $preferences['state']);
+        $preferences['state'] = array_merge($preferences['state'], $enabled_keys);
 
-        if ($cookie === null) {
-            setcookie(static::PROFILE_COOKIE, $profile, 0, $path);
-        }
-
-        $preferences['state'] = array_merge($preferences['state'], array_fill_keys(explode('-', $cookie?:$profile), 1));
-
-        $profile = CProfile::get('uitwix-coloring', '');
-        $cookie = CCookieHelper::get('uitwix-coloring');
-
-        if ($cookie !== null && $cookie !== $profile) {
-            CProfile::update('uitwix-coloring', $cookie, PROFILE_TYPE_STR);
-        }
-
-        if ($cookie === null) {
-            setcookie('uitwix-coloring', $profile, 0, $path);
-        }
-
+        // Colors for aside and background.
         $colors = [];
+        foreach (explode('-', CProfile::get('uitwix-coloring', '')) as $color) {
+            if (strpos($color, ':') === false) {
+                continue;
+            }
 
-        foreach (explode('-', $cookie?:$profile) as $color) {
             [$key, $value] = explode(':', $color) + ['', ''];
             $colors[$key] = $value;
         }
 
         $preferences['color'] = array_merge($preferences['color'], $colors);
 
-        // Color tags
-        $preferences['colortags'] = $this->getProfileArray('colortags', $preferences['colortags']);
-
-        // Custom .css
+        // Custom styles.
         $preferences['css'] = $this->getProfileArray('css', $preferences['css']);
 
-        $key = sprintf(static::PROFILE_KEY_FORMAT, 'noredirect');
-        $preferences[$key] = CProfile::get($key, 0);
-
-        $preferences['syntax'] = [
-            'enabled' => true
-        ];
+        // Color tags.
+        $preferences['colortags'] = $this->getProfileArray('colortags', $preferences['colortags']);
 
         return $preferences;
     }
 
     public function set(array $preferences) {
-        // TODO: tweaks enabled/disabled state.
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = rtrim(substr($path, 0, strrpos($path, '/')), '/');
 
-        // TODO: Body background color.
+        // Enabled UI Twix preferences.
+        $state = implode('-', array_keys(array_filter($preferences['state']??[], 'boolval')));
+        CProfile::update('uitwix', $state, PROFILE_TYPE_STR);
+        setcookie(static::PROFILE_COOKIE, $state, 0, $path);
 
-        // TODO: Navigation background color.
+        // Colors for aside and background.
+        $colors = [];
+        foreach ($preferences['color']??[] as $name => $value) {
+            $colors[] = sprintf('%s:%s', $name, $value);
+        }
+        CProfile::update('uitwix-coloring', implode('-', $colors), PROFILE_TYPE_STR);
+        setcookie('uitwix-coloring', implode('-', $colors), 0, $path);
 
         // Custom styles.
-        $css = array_filter($preferences['uitwix-css']??[], fn ($css) => trim(implode('', $css)) !== '');
+        $css = array_filter($preferences['css']??[], fn ($css) => trim(implode('', $css)) !== '');
         $this->setProfileArray('css', array_values($css));
 
         // Color tags.
-        $tags = array_filter($preferences['uitwix-colortag']??[], fn ($tag) => trim($tag['value']??'') !== '');
+        $tags = array_filter($preferences['colortag']??[], fn ($tag) => trim($tag['value']??'') !== '');
         $this->setProfileArray('colortags', array_values($tags));
-
-        // Prevent redirect after user profile form successfull update.
-        $key = sprintf(static::PROFILE_KEY_FORMAT, 'noredirect');
-        ($preferences[$key] ?? 0)
-            ? CProfile::update($key, $preferences[$key], PROFILE_TYPE_STR) : CProfile::deleteIdx($key);
     }
 
     public function getDefault(): array {
@@ -96,7 +78,8 @@ class Preferences {
                 'bodybg' => 0,
                 'asidebg' => 0,
                 'css' => 0,
-                'colortags' => 0
+                'colortags' => 0,
+                'syntax' => 0
             ],
             'color' => [
                 'bodybg' => '#000000',
@@ -106,7 +89,9 @@ class Preferences {
                 ['value' => '', 'match' => Preferences::MATCH_BEGIN, 'color' => '#ff0000']
             ],
             'css' => [['action' => '', 'css' => '']],
-            'syntax' => ['enabled' => false]
+            'syntax' => [
+                'theme' => 'auto'
+            ]
         ];
     }
 

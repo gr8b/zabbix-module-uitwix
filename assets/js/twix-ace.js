@@ -21,7 +21,7 @@
         },
         {
             mode: 'ace/mode/css',
-            matches: /uitwix-css\[\d+\]\[css\]/
+            matches: /css\[\d+\]\[css\]/
         }
     ]
 

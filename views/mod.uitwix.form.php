@@ -7,28 +7,29 @@ use Modules\UITwix\Services\Preferences;
  * @var array $data
  */
 
+$this->addJsFile('multilineinput.js');
+
 $grid = (new CFormGrid([
-    // (new CVar('uitwix-csrf', $data['uitwix-csrf'])),
     new CLabel(_('Enable sticky filters'), 'uitwix_sticky'),
-    new CFormField((new CCheckBox('uitwix[sticky]', 1))->setChecked((int) $data['state']['sticky'])),
+    new CFormField((new CCheckBox('state[sticky]', 1))->setChecked((int) $data['state']['sticky'])),
 
     new CLabel(_('Enable dragging of modal windows'), 'uitwix_windrag'),
-    new CFormField((new CCheckBox('uitwix[windrag]', 1))->setChecked((int) $data['state']['windrag'])),
+    new CFormField((new CCheckBox('state[windrag]', 1))->setChecked((int) $data['state']['windrag'])),
 
     new CLabel(_('Custom color theme')),
     new CFormField([
         new CDiv([
-            (new CCheckBox('uitwix[bodybg]', 1))->setChecked((int) $data['state']['bodybg']),
+            (new CCheckBox('state[bodybg]', 1))->setChecked((int) $data['state']['bodybg']),
             (new CLabel([
-                (new CInput('color', 'uitwix[color][bodybg]', $data['color']['bodybg']))
+                (new CInput('color', 'color[bodybg]', $data['color']['bodybg']))
                     ->setEnabled(!!$data['state']['bodybg']),
                 _('Body background color')
             ]))->addClass(!!$data['state']['bodybg'] ? null : ZBX_STYLE_DISABLED)
         ]),
         new CDiv([
-            (new CCheckBox('uitwix[asidebg]', 1))->setChecked((int) $data['state']['asidebg']),
+            (new CCheckBox('state[asidebg]', 1))->setChecked((int) $data['state']['asidebg']),
             (new CLabel([
-                (new CInput('color', 'uitwix[color][asidebg]', $data['color']['asidebg']))
+                (new CInput('color', 'color[asidebg]', $data['color']['asidebg']))
                     ->setEnabled(!!$data['state']['asidebg']),
                 _('Navigation background color')
             ]))->addClass(!!$data['state']['asidebg'] ? null : ZBX_STYLE_DISABLED)
@@ -37,7 +38,7 @@ $grid = (new CFormGrid([
 
     new CLabel(_('Color tags')),
     new CFormField([
-        (new CCheckBox('uitwix[state][colortags]', 1))->setChecked((int) $data['state']['colortags']),
+        (new CCheckBox('state[colortags]', 1))->setChecked((int) $data['state']['colortags']),
         (new CDiv([
             (new CTable())
                 ->setHeader([
@@ -52,7 +53,7 @@ $grid = (new CFormGrid([
                     ))->setColSpan(4)
                 ),
             new CTemplateTag('colortag-row-tmpl', (new CRow([
-                    (new CSelect('uitwix-colortag[#{rowNum}][match]'))
+                    (new CSelect('colortag[#{rowNum}][match]'))
                         ->removeId()
                         ->addOptions(CSelect::createOptionsFromArray([
                             Preferences::MATCH_BEGIN => _('Starts with'),
@@ -60,12 +61,12 @@ $grid = (new CFormGrid([
                             Preferences::MATCH_END => _('Ends with')
                         ]))
                         ->setWidth(ZBX_TEXTAREA_SMALL_WIDTH),
-                    (new CTextBox('uitwix-colortag[#{rowNum}][value]', '#{value}'))
+                    (new CTextBox('colortag[#{rowNum}][value]', '#{value}'))
                         ->removeId()
                         ->setAttribute('placeholder', _('value'))
                         ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH),
                     (new CLabel([
-                        (new CInput('color', 'uitwix-colortag[#{rowNum}][color]', '#{color}'))->removeId()
+                        (new CInput('color', 'colortag[#{rowNum}][color]', '#{color}'))->removeId()
                     ])),
                     (new CButtonLink(_('Remove')))->addClass('element-table-remove')
                 ]))->addClass('form_row')
@@ -76,9 +77,9 @@ $grid = (new CFormGrid([
             ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
     ]),
 
-    new CLabel(_('Custom styles'), 'uitwix[state][css]'),
+    new CLabel(_('Custom styles'), 'state[css]'),
     new CFormField([
-        (new CCheckBox('uitwix[state][css]', 1))->setChecked((int) $data['state']['css']),
+        (new CCheckBox('state[css]', 1))->setChecked((int) $data['state']['css']),
         (new CDiv([
             (new CTable())
                 ->setHeader([
@@ -94,11 +95,11 @@ $grid = (new CFormGrid([
                 ),
             (new CTemplateTag(null, (new CRow([
                     (new CCol((new CDiv())->addClass(ZBX_STYLE_DRAG_ICON)))->addClass(ZBX_STYLE_TD_DRAG_ICON),
-                    (new CTextBox('uitwix-css[#{rowNum}][action]', '#{*action}'))
+                    (new CTextBox('css[#{rowNum}][action]', '#{*action}'))
                         ->removeId()
                         ->setAttribute('placeholder', _('action'))
                         ->setWidth(ZBX_TEXTAREA_MEDIUM_WIDTH),
-                    (new CMultilineInput('uitwix-css[#{rowNum}][css]', '', ['add_post_js' => false]))
+                    (new CMultilineInput('css[#{rowNum}][css]', '', ['add_post_js' => false]))
                         ->setWidth(ZBX_TEXTAREA_STANDARD_WIDTH)
                         ->setAttribute('data-options', json_encode([
                             'title' => _('CSS'),
@@ -120,7 +121,7 @@ $grid = (new CFormGrid([
 
     new CLabel(_('Code highlight')),
     new CFormField([
-        (new CCheckBox('uitwix[syntax][enabled]', 1))->setChecked((int) $data['syntax']['enabled']),
+        (new CCheckBox('state[syntax]', 1))->setChecked((int) $data['state']['syntax']),
         (new CDiv(
             (new CDiv(implode("\n", [
                 '// Playground',
@@ -140,8 +141,9 @@ $grid = (new CFormGrid([
 (new CHtmlPage())
     ->setTitle(_('UI Twix'))
     ->addItem(
-        (new CForm('post', 'zabbix.php?action=mod.uitwix.form.update'))
+        (new CForm('post', (new CUrl('zabbix.php'))->getUrl()))
             ->addVar(CSRF_TOKEN_NAME, CCsrfTokenHelper::get('mod.uitwix.form.update'))
+            ->addVar('action', 'mod.uitwix.form.update')
             ->addItem(getMessages())
             ->addItem(
                 (new CTabView())

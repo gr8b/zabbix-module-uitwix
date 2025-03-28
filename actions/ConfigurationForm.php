@@ -12,7 +12,17 @@ class ConfigurationForm extends CController {
     }
 
     protected function checkInput() {
-        return true;
+        $fields = [
+            'state' =>      'array',
+            'color' =>      'array',
+            'colortag' =>   'array',
+            'css' =>        'array',
+            'syntax' =>     'array'
+        ];
+
+        $ret = $this->validateInput($fields);
+
+        return $ret;
     }
 
     protected function checkPermissions() {

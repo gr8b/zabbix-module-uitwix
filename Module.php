@@ -27,7 +27,7 @@ class Module extends CModule {
             $assets['css'][] = '../../../../zabbix.php?action=mod.uitwix.css';
         }
 
-        if ($preferences['syntax']['enabled']) {
+        if ($preferences['state']['syntax'] || $action === 'mod.uitwix.form') {
             $assets['js'] = array_merge($assets['js'], [
                 'ace.1.5.0/ace.js', 'ace.1.5.0/ext-language_tools.js', 'ace.1.5.0/worker-base.js',
                 'ace.1.5.0/worker-javascript.js', 'ace.1.5.0/mode-javascript.js', 'ace.1.5.0/worker-css.js',
