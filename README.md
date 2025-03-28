@@ -117,15 +117,18 @@ Use custom sidebar color for other UI elements
 }
 ```
 
-You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.\
+You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.
 
 ### Development
 
 Clone repository, run `composer install` to initialize composer packages, then can use `composer run dev-watch --timeout 0` to rebuild `.css` automatically when `assets/less/uitwix.less` file is changed.
 
-### Composer packages
+### Libraries in use
 
-- **wikimedia/less.php**: ^4.2
+|Version|Repository|Description|
+|-------|----------|-----------|
+|4.2|[wikimedia/less.php](https://github.com/wikimedia/less.php)| PHP .less to .css compiler, used during development.|
+|1.5.0|[ajaxorg/ace](https://github.com/ajaxorg/ace)|Syntax highlighting.|
 
 ### Installation
 
