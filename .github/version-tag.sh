@@ -29,8 +29,12 @@ while IFS= read -r commit; do
 done <<< "$commits"
 
 version=$(jq -r '.version' $script_dir/../manifest.json)
-IFS='.' read -ra minor_patch <<< "$version"
+IFS='.' read -ra minor_patch <<< "$prev_tag"
 
-((minor = "${minor_patch[0]}" + minor))
-((patch = "${minor_patch[1]}" + patch))
+if ((minor > 0)); then
+    ((minor = "${minor_patch[0]}" + minor))
+    patch=0
+else
+    ((patch = "${minor_patch[1]}" + patch))
+fi
 echo "${minor}.${patch}"
