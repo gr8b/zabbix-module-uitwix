@@ -26,4 +26,4 @@
             centerDialog.call(this);
         }
     }
-})(jQuery)
+})(jQuery);
