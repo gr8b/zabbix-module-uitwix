@@ -1,4 +1,5 @@
-($ => {
+(`; ${document.cookie}`).split(`; uitwix=`).pop().split(';')[0].split('-').indexOf('syntax') !== -1
+&& ($ => {
     const theme = document.documentElement.getAttribute('color-scheme') === 'dark' ? 'ace/theme/twilight' : '';
     const ace_settings = {
         theme,
