@@ -1,6 +1,6 @@
 ## UI Twix
 
-![](doc/user-profile.png)
+![](doc/uitwix.png)
 
 [![Latest Release](https://img.shields.io/github/v/release/gr8b/zabbix-module-uitwix)](https://github.com/gr8b/zabbix-module-uitwix/releases)
 
@@ -12,6 +12,8 @@
 - Modify main navigation color scheme and background color.
 - Allow users to change the background color of tags when the tag string or tag value string matches a specific value.
 - Include user-defined CSS on a specific action page or on every page. See [examples](#examples) section.
+- Syntax highlight for javascript and css fields:
+  - item and item prototype fields: script, browser script, JSON preprocessing parameter
 
 
 ### Video
@@ -79,15 +81,54 @@ body { background-color: rgb(235, 235, 240) }
 html[color-scheme="dark"] body { background-color: rgb(26, 26, 26) }
 ```
 
-You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.\
+Customize editor, with syntax highlight, font size
+- Leave the Action field empty, to include CSS on every page.
+- Set the style definition below as the CSS field value.
+```css
+/* Ace editor styles */
+.ace_editor {
+    font-size: 15px !important;
+}
+```
+
+Make widget tables header row sticky
+- Action value set to `action=dashboard.view`
+- Set the style definition below as the CSS field value.
+```css
+.dashboard-grid-widget-body > .list-table thead th,
+.dashboard-grid-widget-body > .list-table thead .timeline-th {
+    position: sticky;
+    top: 0;
+    background-color:#2b2b2b;
+    z-index: 1000;
+}
+```
+
+Use custom sidebar color for other UI elements
+- Leave the Action field empty, to include CSS on every page.
+- Set the style definition below as the CSS field value.
+```css
+[uitwix-coloring-body="on"] {
+    .table-forms-container,
+    .overlay-dialogue.modal-popup, .overlay-dialogue.modal-popup .ui-tabs-nav,
+    header.header-title {
+        background-color: var(--uitwix-sidebar-bgcolor);
+    }
+}
+```
+
+You can also visit the https://github.com/aigarskadikis/z70css repository for more examples.
 
 ### Development
 
 Clone repository, run `composer install` to initialize composer packages, then can use `composer run dev-watch --timeout 0` to rebuild `.css` automatically when `assets/less/uitwix.less` file is changed.
 
-### Composer packages
+### Libraries in use
 
-- **wikimedia/less.php**: ^4.2
+|Version|Repository|Description|
+|-------|----------|-----------|
+|4.2|[wikimedia/less.php](https://github.com/wikimedia/less.php)| PHP .less to .css compiler, used during development.|
+|1.5.0|[ajaxorg/ace](https://github.com/ajaxorg/ace)|Syntax highlighting.|
 
 ### Installation
 

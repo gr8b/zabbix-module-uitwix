@@ -1,26 +1,21 @@
 $(() => {
-    const tmpl = document.querySelector('#uitwix-tmpl');
-    const $nav = $('#tabs');
+    const $nav = $('#uitwix');
 
-    $nav.find('.ui-tabs-nav').append(tmpl.content.querySelector('#tab_uitwix'));
-    $nav.find('[role="tabpanel"]:last').after(tmpl.content.querySelector('#uitwix'));
-    $nav.tabs('refresh');
-
-    $nav.on('click', '[name="uitwix[bodybg]"],[name="uitwix[asidebg]"]', e => {
+    $nav.on('click', '[name="state[bodybg]"],[name="state[asidebg]"]', e => {
         const input = e.target.parentNode.querySelector('input[type="color"]');
         const input_bodyattr = {
-            'uitwix[bodybg]': 'uitwix-coloring-body',
-            'uitwix[asidebg]': 'uitwix-coloring-sidebar'
+            'state[bodybg]': 'uitwix-coloring-body',
+            'state[asidebg]': 'uitwix-coloring-sidebar'
         }
 
         input.toggleAttribute('disabled', !e.target.checked);
         input.closest('label').classList.toggle('disabled', !e.target.checked);
         document.documentElement.toggleAttribute(input_bodyattr[e.target.getAttribute('name')], e.target.checked);
     });
-    $nav.on('input', '[name="uitwix[color][bodybg]"],[name="uitwix[color][asidebg]"]', e => {
+    $nav.on('input', '[name="color[bodybg]"],[name="color[asidebg]"]', e => {
         const input_cssvar = {
-            'uitwix[color][bodybg]': '--uitwix-body-bgcolor',
-            'uitwix[color][asidebg]': '--uitwix-sidebar-bgcolor'
+            'color[bodybg]': '--uitwix-body-bgcolor',
+            'color[asidebg]': '--uitwix-sidebar-bgcolor'
         }
 
         document.body.style.setProperty(input_cssvar[e.target.getAttribute('name')], e.target.value);
@@ -56,23 +51,28 @@ $(() => {
         dataCallback: (row) => ({color: '#000000', ...row})
     });
 
-    $nav.closest('form').on('submit', e => {
-        let checkboxes = [];
-        let colors = [];
+    initCodeHighlight('uitwix-ace-playground');
 
-        for (const checkbox of [...document.querySelectorAll('[name^="uitwix["]:checked')]) {
-            const name = checkbox.getAttribute('name').match(/.+\[(.+)\]/)[1];
 
-            checkboxes.push(name);
-        }
+    function initCodeHighlight(containerid) {
+        const theme = document.documentElement.getAttribute('color-scheme') === 'dark' ? 'ace/theme/twilight' : '';
+        const editor = ace.edit(containerid, {
+            mode: 'ace/mode/javascript',
+            theme,
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            showGutter: true,
+            readOnly: document.querySelector('[name="state[syntax]"]:checked') === null,
+            tooltipFollowsMouse: true
+        });
 
-        for (const color of [...document.querySelectorAll('input[name^="uitwix[color]"]')]) {
-            const name = color.getAttribute('name').match(/.+\[(.+)\]\[(.+)\]/)[2];
+        document.querySelector('[name="state[syntax]"]').addEventListener('change', e => {
+            editor.setOption('readOnly', !e.target.checked);
+            editor.renderer.$cursorLayer.element.style.display = editor.getReadOnly() ? 'none' : '';
+        });
+        // editor.session.setMode('ace/mode/javascript');
 
-            colors.push(`${name}:${color.value}`);
-        }
-
-        document.cookie = `uitwix=${encodeURIComponent(checkboxes.join('-'))}`;
-        document.cookie = `uitwix-coloring=${encodeURIComponent(colors.join('-'))}`;
-    })
+        editor.session.setUseWorker(true);
+        editor.renderer.$cursorLayer.element.style.display = editor.getReadOnly() ? 'none' : '';
+    }
 });

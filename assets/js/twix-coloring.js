@@ -13,4 +13,4 @@
     --uitwix-sidebar-bgcolor: ${colors.asidebg??'transparent'};
 }`;
     document.head.appendChild(style);
-})()
+})();
