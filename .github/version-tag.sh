@@ -35,6 +35,7 @@ if ((minor > 0)); then
     ((minor = "${minor_patch[0]}" + minor))
     patch=0
 else
+    ((minor = "${minor_patch[0]}"))
     ((patch = "${minor_patch[1]}" + patch))
 fi
 
