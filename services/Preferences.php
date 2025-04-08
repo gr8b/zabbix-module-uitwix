@@ -7,7 +7,6 @@ use CProfile;
 class Preferences {
 
     const PROFILE_KEY_FORMAT = 'uitwix-%1$s';
-    const PROFILE_COOKIE = 'uitwix';
 
     const MATCH_BEGIN = 1;
     const MATCH_CONTAIN = 2;
@@ -51,7 +50,6 @@ class Preferences {
         // Enabled UI Twix preferences.
         $state = implode('-', array_keys(array_filter($preferences['state']??[], 'boolval')));
         CProfile::update('uitwix', $state, PROFILE_TYPE_STR);
-        setcookie(static::PROFILE_COOKIE, $state, 0, $path);
 
         // Colors for aside and background.
         $colors = [];
@@ -59,7 +57,6 @@ class Preferences {
             $colors[] = sprintf('%s:%s', $name, $value);
         }
         CProfile::update('uitwix-coloring', implode('-', $colors), PROFILE_TYPE_STR);
-        setcookie('uitwix-coloring', implode('-', $colors), 0, $path);
 
         // Custom styles.
         $css = array_filter($preferences['css']??[], fn ($css) => trim(implode('', $css)) !== '');

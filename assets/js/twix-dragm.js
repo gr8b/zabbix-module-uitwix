@@ -1,5 +1,4 @@
-(`; ${document.cookie}`).split(`; uitwix=`).pop().split(';')[0].split('-').indexOf('windrag') !== -1
-&& ($ => {
+($ => {
     document.addEventListener('DOMContentLoaded', e => {
         (new MutationObserver(mutations => {
             for (const mutation of [...mutations]) {

@@ -1,5 +1,4 @@
-(`; ${document.cookie}`).split(`; uitwix=`).pop().split(';')[0].split('-').indexOf('sticky') !== -1
-&& document.addEventListener('DOMContentLoaded', e =>
+document.addEventListener('DOMContentLoaded', e =>
     [
         // Dashboard
         document.querySelector('.filter-space'), document.querySelector('.filter-space')?.previousElementSibling,

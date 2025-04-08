@@ -9,6 +9,7 @@ patch=0
 if [ "$prev_tag" != "" ]; then
     commits=$(git log --oneline "$prev_tag"..HEAD)
 else
+    prev_tag="1.0"
     commits=$(git log --oneline)
 fi
 
@@ -28,7 +29,6 @@ while IFS= read -r commit; do
     fi
 done <<< "$commits"
 
-version=$(jq -r '.version' $script_dir/../manifest.json)
 IFS='.' read -ra minor_patch <<< "$prev_tag"
 
 if ((minor > 0)); then
@@ -37,4 +37,5 @@ if ((minor > 0)); then
 else
     ((patch = "${minor_patch[1]}" + patch))
 fi
+
 echo "${minor}.${patch}"

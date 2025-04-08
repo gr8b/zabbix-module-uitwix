@@ -38,6 +38,7 @@ class Css extends CController {
      */
     protected function getCssForAction(string $uri, array $preferences): string {
         $css = [];
+
         $debug = CWebUser::getDebugMode();
         parse_str(parse_url($uri, PHP_URL_QUERY), $query_args);
         $action = $query_args['action']??'';
@@ -110,6 +111,12 @@ class Css extends CController {
                 $css[] = sprintf($rule, $tag['value'], $tag['color']);
             }
         }
+
+        $css[] = implode("\r\n", [
+        ':root {',
+            '--uitwix-body-bgcolor: '.$preferences['color']['bodybg'].';',
+            '--uitwix-sidebar-bgcolor: '.$preferences['color']['asidebg'].';',
+        '}']);
 
         return implode("\r\n", $css);
     }

@@ -104,13 +104,15 @@ Make widget tables header row sticky
 }
 ```
 
-Use custom sidebar color for other UI elements
+Use custom sidebar color for other UI elements (color theme)
 - Leave the Action field empty, to include CSS on every page.
 - Set the style definition below as the CSS field value.
 ```css
-[uitwix-coloring-body="on"] {
+[uitwix-coloring-body] {
     .table-forms-container,
     .overlay-dialogue.modal-popup, .overlay-dialogue.modal-popup .ui-tabs-nav,
+    .dashboard-grid-widget-header, .dashboard-grid-widget-contents, .list-table,
+    .filter-container, .filter-forms,
     header.header-title {
         background-color: var(--uitwix-sidebar-bgcolor);
     }

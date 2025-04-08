@@ -23,13 +23,30 @@ class Module extends CModule {
             $assets['js'][] = 'twix-userform.js';
         }
 
-        if ($preferences['state']['css'] || $preferences['state']['colortags']) {
+        if ($preferences['state']['sticky']) {
+            $assets['js'][] = 'twix-sticky.js';
+        }
+
+        if ($preferences['state']['windrag'] || $action === 'mod.uitwix.form') {
+            $assets['js'][] = 'twix-dragm.js';
+        }
+
+        if ($preferences['state']['bodybg']) {
+            zbx_add_post_js("document.documentElement.setAttribute('uitwix-coloring-body', 'on')");
+        }
+
+        if ($preferences['state']['asidebg']) {
+            zbx_add_post_js("document.documentElement.setAttribute('uitwix-coloring-sidebar', 'on')");
+        }
+
+        if ($preferences['state']['css'] || $preferences['state']['colortags']
+                || $preferences['state']['bodybg'] || $preferences['state']['asidebg']) {
             $assets['css'][] = '../../../../zabbix.php?action=mod.uitwix.css';
         }
 
         if ($preferences['state']['syntax'] || $action === 'mod.uitwix.form') {
             $assets['js'] = array_merge($assets['js'], [
-                'ace.1.5.0/ace.js', 'ace.1.5.0/ext-language_tools.js', 'ace.1.5.0/worker-base.js',
+                'twix-ace.js', 'ace.1.5.0/ace.js', 'ace.1.5.0/ext-language_tools.js', 'ace.1.5.0/worker-base.js',
                 'ace.1.5.0/worker-javascript.js', 'ace.1.5.0/mode-javascript.js', 'ace.1.5.0/worker-css.js',
                 'ace.1.5.0/mode-css.js', 'ace.1.5.0/theme-twilight.js'
             ]);
