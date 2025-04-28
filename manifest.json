@@ -9,7 +9,7 @@
   "namespace": "UITwix",
   "version": "1.0",
   "assets": {
-    "css": ["uitwix.css"],
+    "css": [],
     "js": []
   },
   "actions": {

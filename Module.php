@@ -21,6 +21,7 @@ class Module extends CModule {
 
         if ($action === 'mod.uitwix.form') {
             $assets['js'][] = 'twix-userform.js';
+            $assets['css'][] = 'uitwix.css';
         }
 
         if ($preferences['state']['sticky']) {

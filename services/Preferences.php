@@ -71,6 +71,7 @@ class Preferences {
         return [
             'state' => [
                 'sticky' => 0,
+                'widget_header' => 0,
                 'windrag' => 0,
                 'bodybg' => 0,
                 'asidebg' => 0,

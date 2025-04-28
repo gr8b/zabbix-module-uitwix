@@ -10,10 +10,13 @@ use Modules\UITwix\Services\Preferences;
 $this->addJsFile('multilineinput.js');
 
 $grid = (new CFormGrid([
-    new CLabel(_('Enable sticky filters'), 'uitwix_sticky'),
+    new CLabel(_('Enable sticky filters'), 'state_sticky'),
     new CFormField((new CCheckBox('state[sticky]', 1))->setChecked((int) $data['state']['sticky'])),
 
-    new CLabel(_('Enable dragging of modal windows'), 'uitwix_windrag'),
+    new CLabel(_('Enable sticky header for widgets'), 'state_widget_header'),
+    new CFormField((new CCheckBox('state[widget_header]', 1))->setChecked((int) $data['state']['widget_header'])),
+
+    new CLabel(_('Enable dragging of modal windows'), 'state_windrag'),
     new CFormField((new CCheckBox('state[windrag]', 1))->setChecked((int) $data['state']['windrag'])),
 
     new CLabel(_('Custom color theme')),
@@ -36,7 +39,7 @@ $grid = (new CFormGrid([
         ])
     ]),
 
-    new CLabel(_('Color tags')),
+    new CLabel(_('Color tags'), 'state_colortags'),
     new CFormField([
         (new CCheckBox('state[colortags]', 1))->setChecked((int) $data['state']['colortags']),
         (new CDiv([
@@ -77,7 +80,7 @@ $grid = (new CFormGrid([
             ->addClass(ZBX_STYLE_TABLE_FORMS_SEPARATOR)
     ]),
 
-    new CLabel(_('Custom styles'), 'state[css]'),
+    new CLabel(_('Custom styles'), 'state_css'),
     new CFormField([
         (new CCheckBox('state[css]', 1))->setChecked((int) $data['state']['css']),
         (new CDiv([
@@ -119,7 +122,7 @@ $grid = (new CFormGrid([
         ->addStyle('vertical-align: top')
     ]),
 
-    new CLabel(_('Code highlight')),
+    new CLabel(_('Code highlight'), 'state_syntax'),
     new CFormField([
         (new CCheckBox('state[syntax]', 1))->setChecked((int) $data['state']['syntax']),
         (new CDiv(

@@ -118,6 +118,22 @@ class Css extends CController {
             '--uitwix-sidebar-bgcolor: '.$preferences['color']['asidebg'].';',
         '}']);
 
+        if ($preferences['state']['widget_header']) {
+            $theme = getUserTheme(CWebUser::$data);
+            $theme_bgcolor = [
+                'dark-theme' => '#2b2b2b',
+                'hc-dark' => '#000000'
+            ][$theme] ?? '#ffffff';
+            $css[] = implode("\r\n", [
+                '.dashboard-grid-widget-body > .list-table thead th,',
+                '.dashboard-grid-widget-body > .list-table thead .timeline-th {',
+                    'position: sticky;',
+                    'top: 0;',
+                    'background-color:'.$theme_bgcolor.';',
+                    'z-index: 10;'
+            ]);
+        }
+
         return implode("\r\n", $css);
     }
 }
