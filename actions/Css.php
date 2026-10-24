@@ -90,25 +90,21 @@ class Css extends CController {
             $css[] = '/* tags css */';
         }
 
+        $tagop_rule = version_compare(ZABBIX_API_VERSION, '8.0.0', '<')
+            ? [
+                Preferences::MATCH_BEGIN => '.tag[data-hintbox-contents^="%1$s"] { background-color: %2$s }',
+                Preferences::MATCH_CONTAIN => '.tag[data-hintbox-contents*="%1$s"] { background-color: %2$s }',
+                Preferences::MATCH_END => '.tag[data-hintbox-contents$="%1$s"] { background-color: %2$s }'
+            ]
+            : [
+                Preferences::MATCH_BEGIN => '.tag[data-hintbox-html^="<div>%1$s"] { background-color: %2$s }',
+                Preferences::MATCH_CONTAIN => '.tag[data-hintbox-html*="%1$s"] { background-color: %2$s }',
+                Preferences::MATCH_END => '.tag[data-hintbox-html$="%1$s</div>"] { background-color: %2$s }'
+            ];
+
         foreach ($tags as $tag) {
-            $rule = '';
-
-            switch ($tag['match']) {
-                case Preferences::MATCH_BEGIN:
-                    $rule = '.tag[data-hintbox-contents^="%1$s"] { background-color: %2$s }';
-                    break;
-
-                case Preferences::MATCH_CONTAIN:
-                    $rule = '.tag[data-hintbox-contents*="%1$s"] { background-color: %2$s }';
-                    break;
-
-                case Preferences::MATCH_END:
-                    $rule = '.tag[data-hintbox-contents$="%1$s"] { background-color: %2$s }';
-                    break;
-            }
-
-            if ($rule !== '') {
-                $css[] = sprintf($rule, $tag['value'], $tag['color']);
+            if (array_key_exists($tag['match'], $tagop_rule)) {
+                $css[] = sprintf($tagop_rule[$tag['match']], $tag['value'], $tag['color']);
             }
         }
 
