@@ -130,7 +130,8 @@ class Css extends CController {
                     'position: sticky;',
                     'top: 0;',
                     'background-color:'.$theme_bgcolor.';',
-                    'z-index: 10;'
+                    'z-index: 10;'.
+                '}'
             ]);
         }
 

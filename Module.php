@@ -2,7 +2,7 @@
 
 namespace Modules\UITwix;
 
-use APP, CMenu, CMenuItem;
+use APP, CRouter, CMenu, CMenuItem;
 use CController as Action;
 use Zabbix\Core\CModule;
 use Modules\UITwix\Services\Preferences;
@@ -16,7 +16,9 @@ class Module extends CModule {
 
     public function getAssets(): array {
         $assets = parent::getAssets();
-        $action = APP::Component()->router->getAction();
+        $action = version_compare(ZABBIX_API_VERSION, '8.0.0', '<')
+            ? APP::Component()->router->getAction()
+            : CRouter::getInstance()->getAction();
         $preferences = $this->preferences->get();
 
         if ($action === 'mod.uitwix.form') {
@@ -43,6 +45,7 @@ class Module extends CModule {
         if ($preferences['state']['css'] || $preferences['state']['colortags']
                 || $preferences['state']['bodybg'] || $preferences['state']['asidebg']) {
             $assets['css'][] = '../../../../zabbix.php?action=mod.uitwix.css';
+            $assets['css'][] = 'uitwix.css';
         }
 
         if ($preferences['state']['syntax'] || $action === 'mod.uitwix.form') {
