@@ -13,9 +13,9 @@
     "js": []
   },
   "actions": {
-    "mod.uitwix.css": {
-      "class": "Css",
-      "layout": "layout.uitwix.css"
+    "mod.uitwix.assets": {
+      "class": "Assets",
+      "layout": "layout.uitwix.assets"
     },
     "mod.uitwix.form": {
       "class": "ConfigurationForm",

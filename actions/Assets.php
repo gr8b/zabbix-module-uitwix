@@ -2,19 +2,23 @@
 
 namespace Modules\UITwix\Actions;
 
-use CController;
-use CControllerResponseData;
-use CWebUser;
+use CController, CControllerResponseData, CWebUser;
 use Modules\UITwix\Services\Preferences;
 
-class Css extends CController {
+class Assets extends CController {
 
     protected function init() {
         $this->disableCsrfValidation();
     }
 
     public function checkInput() {
-        return true;
+        $ret = $this->validateInput([
+            'type' =>  'required|in css,js',
+            'uri' =>   'not_empty|string',
+            'files' => 'required|not_empty|string'
+        ]);
+
+        return $ret;
     }
 
     public function checkPermissions() {
@@ -22,11 +26,23 @@ class Css extends CController {
     }
 
     public function doAction() {
-        $preferences = (new Preferences)->get();
-        $uri = $_SERVER['HTTP_REFERER'] ?? '';
+        $base_dir = __DIR__.'/../assets/'.$this->getInput('type').'/';
+        $files = [];
+
+        foreach (explode(',', $this->getInput('files')) as $file) {
+            $path = $base_dir.'/'.trim($file);
+
+            if (file_exists($path) && is_file($path) && str_starts_with($path, $base_dir)) {
+                $files[] = $path;
+            }
+        }
 
         $this->setResponse((new CControllerResponseData([
-            'css' => $this->getCssForAction($uri, $preferences)
+            'type' =>  $this->getInput('type'),
+            'files' => $files,
+            'uri_css' => $this->hasInput('uri')
+                ? $this->getCssForAction($this->getInput('uri'), (new Preferences)->get())
+                : ''
         ])));
     }
 

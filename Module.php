@@ -20,18 +20,21 @@ class Module extends CModule {
             ? APP::Component()->router->getAction()
             : CRouter::getInstance()->getAction();
         $preferences = $this->preferences->get();
+        $js = [];
+        $css = [];
+        $page_url = urlencode($_SERVER['REQUEST_URI']);
 
         if ($action === 'mod.uitwix.form') {
-            $assets['js'][] = 'twix-userform.js';
-            $assets['css'][] = 'uitwix.css';
+            $js[] = 'twix-userform.js';
+            $css[] = 'uitwix.css';
         }
 
         if ($preferences['state']['sticky']) {
-            $assets['js'][] = 'twix-sticky.js';
+            $js[] = 'twix-sticky.js';
         }
 
         if ($preferences['state']['windrag'] || $action === 'mod.uitwix.form') {
-            $assets['js'][] = 'twix-dragm.js';
+            $js[] = 'twix-dragm.js';
         }
 
         if ($preferences['state']['bodybg']) {
@@ -44,16 +47,25 @@ class Module extends CModule {
 
         if ($preferences['state']['css'] || $preferences['state']['colortags']
                 || $preferences['state']['bodybg'] || $preferences['state']['asidebg']) {
-            $assets['css'][] = '../../../../zabbix.php?action=mod.uitwix.css';
-            $assets['css'][] = 'uitwix.css';
+            // $assets['css'][] = '../../../../zabbix.php?action=mod.uitwix.assets&type=css&uri='
+            //     .urlencode($_SERVER['REQUEST_URI']);
+            $css[] = 'uitwix.css';
         }
 
         if ($preferences['state']['syntax'] || $action === 'mod.uitwix.form') {
-            $assets['js'] = array_merge($assets['js'], [
+            $js = array_merge($js, [
                 'twix-ace.js', 'ace.1.5.0/ace.js', 'ace.1.5.0/ext-language_tools.js', 'ace.1.5.0/worker-base.js',
                 'ace.1.5.0/worker-javascript.js', 'ace.1.5.0/mode-javascript.js', 'ace.1.5.0/worker-css.js',
                 'ace.1.5.0/mode-css.js', 'ace.1.5.0/theme-twilight.js'
             ]);
+        }
+
+        if ($js) {
+            $assets['js'][] = '../../../../zabbix.php?action=mod.uitwix.assets&type=js&files='.implode(',', $js);
+        }
+        if ($css) {
+            $assets['css'][] = '../../../../zabbix.php?action=mod.uitwix.assets&type=css&files='.implode(',', $css).'&uri='.$page_url;
+
         }
 
         return $assets;
